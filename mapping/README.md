@@ -1,0 +1,2 @@
+- model_to_datasets.py: uses fuzzywuzzy to match/parse dataset names that appear in model cards and store a file containing dataset names for each model.
+- triple_mapping.py: build and store the (model, dataset, task) tuples.
