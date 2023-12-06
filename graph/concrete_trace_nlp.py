@@ -12,6 +12,7 @@ from transformers import AutoConfig, AutoModel, AutoTokenizer
 from cube.graph.parser.converter import to_fx_graph
 # pip install sentencepiece
 import psutil
+import gc
 
 def print_memory_usage(prefix : str = ""):
     process = psutil.Process()
@@ -97,12 +98,12 @@ if __name__ == "__main__":
     mem_info = psutil.virtual_memory()
     total_memory = mem_info.total
     print(f"Total memory: {total_memory / (1024 ** 3):.2f} GB")
+    text = "Huggingface is a really excellent project!"
     for model_name in model_name_set:
         print(f"trying to trace {model_name}")
         tried += 1
         try:
             # concrete_args = create_concrete_args(model_name)
-            text = "Huggingface is a really excellent project!"
             tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
             concrete_args = tokenizer(text, return_tensors="pt")
             if isinstance(concrete_args, MutableMapping):
@@ -115,17 +116,14 @@ if __name__ == "__main__":
             model.eval()
             model_loaded.append(f"{model_name}, {config.architectures}")
             before_trace = model(**concrete_args)
-            print_memory_usage("after model forward of " + model_name)
             
             traced_gm = concrete_trace_wrap(model, concrete_args)
             print_memory_usage("after concrete_trace of " + model_name)
             success_traced.append(f"{model_name}, {config.architectures}")
             traced_gm.eval()
             after_trace = traced_gm(**concrete_args)
-            print_memory_usage("after traced_gm forward of " + model_name)
 
             assert check_align(before_trace, after_trace), "Traced model does not match the original model"
-            print_memory_usage("after check_align of " + model_name)
             forward_aligned.append(f"{model_name}, {config.architectures}")
             with open(os.path.join(nlp_dir, "success"), 'a') as file:
                 file.write(f"{model_name}\n")
@@ -144,6 +142,17 @@ if __name__ == "__main__":
             print(error_message)
             continue
         finally:
+            try:
+                del tokenizer
+                del concrete_args
+                del config
+                del model
+                del before_trace
+                del traced_gm
+                del after_trace
+            except NameError:
+                pass
+            gc.collect()
             torch.cuda.empty_cache()
             print(f"all: {len(model_name_set)}, tried: {tried}, model_failed: {len(model_failed)} model_loaded: {len(model_loaded)}, success_traced: {len(success_traced)}, forward_aligned: {len(forward_aligned)}")
     with open(os.path.join(nlp_dir, "nlp_log"), 'w') as f:

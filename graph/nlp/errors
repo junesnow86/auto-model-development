@@ -50420,3 +50420,2432 @@ Traceback (most recent call last):
   File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
     raise EnvironmentError(
 OSError: Can't load tokenizer for 'Declan/FoxNews_model_v3'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'Declan/FoxNews_model_v3' is the correct path to a directory containing all relevant files for a BertTokenizerFast tokenizer.
+
+kevinbror/distilbertbaseuncasedz failed
+Architectures: ['XLMRobertaForTokenClassification']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'kevinbror/distilbertbaseuncasedz'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'kevinbror/distilbertbaseuncasedz' is the correct path to a directory containing all relevant files for a DistilBertTokenizerFast tokenizer.
+
+IIC/mt5-base-lfqa-es failed
+Architectures: ['MT5ForConditionalGeneration']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 117, in <module>
+    before_trace = model(**concrete_args)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/mt5/modeling_mt5.py", line 1515, in forward
+    decoder_outputs = self.decoder(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/mt5/modeling_mt5.py", line 984, in forward
+    raise ValueError(f"You have to specify either {err_msg_prefix}input_ids or {err_msg_prefix}inputs_embeds")
+ValueError: You have to specify either decoder_input_ids or decoder_inputs_embeds
+
+Barkavi/totto-t5-base-bleurt-121K failed
+Architectures: ['DistilBertForMaskedLM']
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 270, in hf_raise_for_status
+    response.raise_for_status()
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: https://huggingface.co/Barkavi/totto-t5-base-bleurt-121K/resolve/main/tokenizer_config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1374, in hf_hub_download
+    raise head_call_error
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1247, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1624, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 402, in _request_wrapper
+    response = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 426, in _request_wrapper
+    hf_raise_for_status(response)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 320, in hf_raise_for_status
+    raise RepositoryNotFoundError(message, response) from e
+huggingface_hub.utils._errors.RepositoryNotFoundError: 401 Client Error. (Request ID: Root=1-656ff25f-53f3a8771e4d69d54f4c4606;d1dc8bfb-52f4-4a18-92d5-dd736cf5bc4c)
+
+Repository Not Found for url: https://huggingface.co/Barkavi/totto-t5-base-bleurt-121K/resolve/main/tokenizer_config.json.
+Please make sure you specified the correct `repo_id` and `repo_type`.
+If you are trying to access a private or gated repo, make sure you are authenticated.
+Invalid username or password.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 718, in from_pretrained
+    tokenizer_config = get_tokenizer_config(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 550, in get_tokenizer_config
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 451, in cached_file
+    raise EnvironmentError(
+OSError: Barkavi/totto-t5-base-bleurt-121K is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`
+
+research-backup/t5-base-subjqa-vanilla-movies-qg failed
+Architectures: ['T5ForConditionalGeneration']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 117, in <module>
+    before_trace = model(**concrete_args)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/t5/modeling_t5.py", line 1521, in forward
+    decoder_outputs = self.decoder(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/t5/modeling_t5.py", line 1011, in forward
+    raise ValueError(f"You have to specify either {err_msg_prefix}input_ids or {err_msg_prefix}inputs_embeds")
+ValueError: You have to specify either decoder_input_ids or decoder_inputs_embeds
+
+anas-awadalla/t5-base-few-shot-k-32-finetuned-squad-infilling-seed-2 failed
+Architectures: ['T5ForConditionalGeneration']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 117, in <module>
+    before_trace = model(**concrete_args)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/t5/modeling_t5.py", line 1521, in forward
+    decoder_outputs = self.decoder(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/t5/modeling_t5.py", line 1011, in forward
+    raise ValueError(f"You have to specify either {err_msg_prefix}input_ids or {err_msg_prefix}inputs_embeds")
+ValueError: You have to specify either decoder_input_ids or decoder_inputs_embeds
+
+danyaljj/gpt-j-6B-step-378500 failed
+Architectures: ['GPTJForCausalLM']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 124, in <module>
+    after_trace = traced_gm(**concrete_args)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/fx/graph_module.py", line 662, in call_wrapped
+    return self._wrapped_call(self, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/fx/graph_module.py", line 281, in __call__
+    raise e
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/fx/graph_module.py", line 271, in __call__
+    return super(self.cls, obj).__call__(*args, **kwargs)  # type: ignore[misc]
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "<eval_with_key>.101", line 59, in forward
+    getitem_9 = getattr_8[-1];  getattr_8 = None
+  File "/home/yileiyang/workspace/MagicCube/cube/graph/parser/fx/concrete_trace_utils/concrete_proxy.py", line 431, in impl
+    return tracer.create_proxy('call_function', target, args, kwargs)
+  File "/home/yileiyang/workspace/MagicCube/cube/graph/parser/fx/concrete_trace_utils/concrete_tracer.py", line 444, in create_proxy
+    value_unwrapped = self.run_target(kind, target, args_unwrapped, kwargs_unwrapped)
+  File "/home/yileiyang/workspace/MagicCube/cube/graph/parser/fx/concrete_trace_utils/concrete_tracer.py", line 374, in run_target
+    result = run(kind, target, args, kwargs)
+  File "/home/yileiyang/workspace/MagicCube/cube/graph/parser/fx/concrete_trace_utils/concrete_tracer.py", line 347, in run
+    return OperatorPatcherContext.patch_run(fn, *args, **kwargs)
+  File "/home/yileiyang/workspace/MagicCube/cube/graph/parser/fx/concrete_trace_utils/operator_patcher.py", line 291, in patch_run
+    assert OperatorPatcherContext.ctx_tracer is not None
+AssertionError
+
+efederici/sentence-BERTino-3-64 failed
+Architectures: ['BertForMaskedLM']
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 270, in hf_raise_for_status
+    response.raise_for_status()
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://huggingface.co/efederici/sentence-BERTino-3-64/resolve/main/config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1247, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1624, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 402, in _request_wrapper
+    response = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 426, in _request_wrapper
+    hf_raise_for_status(response)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 280, in hf_raise_for_status
+    raise EntryNotFoundError(message, response) from e
+huggingface_hub.utils._errors.EntryNotFoundError: 404 Client Error. (Request ID: Root=1-656ff333-183de2153a70ade20c44db66;9b7a5c2c-10ed-4157-895d-5da947b2ec7a)
+
+Entry Not Found for url: https://huggingface.co/efederici/sentence-BERTino-3-64/resolve/main/config.json.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 733, in from_pretrained
+    config = AutoConfig.from_pretrained(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/configuration_auto.py", line 1048, in from_pretrained
+    config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 622, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 677, in _get_config_dict
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 481, in cached_file
+    raise EnvironmentError(
+OSError: efederici/sentence-BERTino-3-64 does not appear to have a file named config.json. Checkout 'https://huggingface.co/efederici/sentence-BERTino-3-64/main' for available files.
+
+Taramiko/DialoGPT-small-hoshiyo_kojima failed
+Architectures: ['BertForMaskedLM']
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 270, in hf_raise_for_status
+    response.raise_for_status()
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://huggingface.co/Taramiko/DialoGPT-small-hoshiyo_kojima/resolve/main/config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1247, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1624, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 402, in _request_wrapper
+    response = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 426, in _request_wrapper
+    hf_raise_for_status(response)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 280, in hf_raise_for_status
+    raise EntryNotFoundError(message, response) from e
+huggingface_hub.utils._errors.EntryNotFoundError: 404 Client Error. (Request ID: Root=1-656ff333-5c72d61c67e0dc6f7a33674a;f77f99cf-7e70-4616-95a8-07e9808e8758)
+
+Entry Not Found for url: https://huggingface.co/Taramiko/DialoGPT-small-hoshiyo_kojima/resolve/main/config.json.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 733, in from_pretrained
+    config = AutoConfig.from_pretrained(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/configuration_auto.py", line 1048, in from_pretrained
+    config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 622, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 677, in _get_config_dict
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 481, in cached_file
+    raise EnvironmentError(
+OSError: Taramiko/DialoGPT-small-hoshiyo_kojima does not appear to have a file named config.json. Checkout 'https://huggingface.co/Taramiko/DialoGPT-small-hoshiyo_kojima/main' for available files.
+
+nestoralvaro/mt5-base-finetuned-xsum-RAW_data_prep_2021_12_26___t22027_162754.csv__google_mt5_base failed
+Architectures: ['MT5ForConditionalGeneration']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 117, in <module>
+    before_trace = model(**concrete_args)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/mt5/modeling_mt5.py", line 1515, in forward
+    decoder_outputs = self.decoder(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/mt5/modeling_mt5.py", line 984, in forward
+    raise ValueError(f"You have to specify either {err_msg_prefix}input_ids or {err_msg_prefix}inputs_embeds")
+ValueError: You have to specify either decoder_input_ids or decoder_inputs_embeds
+
+yihsuan/mt5_chinese_small failed
+Architectures: ['MT5ForConditionalGeneration']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 117, in <module>
+    before_trace = model(**concrete_args)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/mt5/modeling_mt5.py", line 1515, in forward
+    decoder_outputs = self.decoder(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/mt5/modeling_mt5.py", line 984, in forward
+    raise ValueError(f"You have to specify either {err_msg_prefix}input_ids or {err_msg_prefix}inputs_embeds")
+ValueError: You have to specify either decoder_input_ids or decoder_inputs_embeds
+
+ghadeermobasher/BioRED-Dis-WLT-128-BlueBERT-100 failed
+Architectures: ['MT5ForConditionalGeneration']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'ghadeermobasher/BioRED-Dis-WLT-128-BlueBERT-100'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'ghadeermobasher/BioRED-Dis-WLT-128-BlueBERT-100' is the correct path to a directory containing all relevant files for a BertTokenizerFast tokenizer.
+
+Meowren/DialoGPT-small-Rick-Bot failed
+Architectures: ['ElectraForQuestionAnswering']
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 270, in hf_raise_for_status
+    response.raise_for_status()
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://huggingface.co/Meowren/DialoGPT-small-Rick-Bot/resolve/main/config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1247, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1624, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 402, in _request_wrapper
+    response = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 426, in _request_wrapper
+    hf_raise_for_status(response)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 280, in hf_raise_for_status
+    raise EntryNotFoundError(message, response) from e
+huggingface_hub.utils._errors.EntryNotFoundError: 404 Client Error. (Request ID: Root=1-656ff389-3319fec87f2681bc7b3b7b99;adaccff7-d6bb-4e15-9469-45b4d9b9b510)
+
+Entry Not Found for url: https://huggingface.co/Meowren/DialoGPT-small-Rick-Bot/resolve/main/config.json.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 733, in from_pretrained
+    config = AutoConfig.from_pretrained(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/configuration_auto.py", line 1048, in from_pretrained
+    config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 622, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 677, in _get_config_dict
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 481, in cached_file
+    raise EnvironmentError(
+OSError: Meowren/DialoGPT-small-Rick-Bot does not appear to have a file named config.json. Checkout 'https://huggingface.co/Meowren/DialoGPT-small-Rick-Bot/main' for available files.
+
+JUNEYEOB/FT_adafactor_lr6_lcs_lr6 failed
+Architectures: ['BertForSequenceClassification']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 768, in from_pretrained
+    return tokenizer_class.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'JUNEYEOB/FT_adafactor_lr6_lcs_lr6'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'JUNEYEOB/FT_adafactor_lr6_lcs_lr6' is the correct path to a directory containing all relevant files for a BertTokenizerFast tokenizer.
+
+Jean-Baptiste/camembert-ner failed
+Architectures: ['BertForSequenceClassification']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2024, in from_pretrained
+    return cls._from_pretrained(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2256, in _from_pretrained
+    tokenizer = cls(*init_inputs, **init_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/camembert/tokenization_camembert_fast.py", line 127, in __init__
+    super().__init__(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_fast.py", line 114, in __init__
+    fast_tokenizer = convert_slow_tokenizer(slow_tokenizer)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/convert_slow_tokenizer.py", line 1344, in convert_slow_tokenizer
+    return converter_class(transformer_tokenizer).converted()
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/convert_slow_tokenizer.py", line 459, in __init__
+    requires_backends(self, "protobuf")
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1247, in requires_backends
+    raise ImportError("".join(failed))
+ImportError: 
+CamembertConverter requires the protobuf library but it was not found in your environment. Checkout the instructions on the
+installation page of its repo: https://github.com/protocolbuffers/protobuf/tree/master/python#installation and follow the ones
+that match your environment. Please note that you may need to restart your runtime after installation.
+
+
+Helsinki-NLP/opus-mt-fiu-fiu failed
+Architectures: ['MarianMTModel']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 117, in <module>
+    before_trace = model(**concrete_args)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/marian/modeling_marian.py", line 1203, in forward
+    decoder_outputs = self.decoder(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/marian/modeling_marian.py", line 932, in forward
+    raise ValueError("You have to specify either decoder_input_ids or decoder_inputs_embeds")
+ValueError: You have to specify either decoder_input_ids or decoder_inputs_embeds
+
+mrm8488/deberta-v3-base-goemotions failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 768, in from_pretrained
+    return tokenizer_class.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2024, in from_pretrained
+    return cls._from_pretrained(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2256, in _from_pretrained
+    tokenizer = cls(*init_inputs, **init_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/deberta_v2/tokenization_deberta_v2_fast.py", line 133, in __init__
+    super().__init__(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_fast.py", line 114, in __init__
+    fast_tokenizer = convert_slow_tokenizer(slow_tokenizer)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/convert_slow_tokenizer.py", line 1344, in convert_slow_tokenizer
+    return converter_class(transformer_tokenizer).converted()
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/convert_slow_tokenizer.py", line 459, in __init__
+    requires_backends(self, "protobuf")
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1247, in requires_backends
+    raise ImportError("".join(failed))
+ImportError: 
+DebertaV2Converter requires the protobuf library but it was not found in your environment. Checkout the instructions on the
+installation page of its repo: https://github.com/protocolbuffers/protobuf/tree/master/python#installation and follow the ones
+that match your environment. Please note that you may need to restart your runtime after installation.
+
+
+CarperAI/FIM-NeoX-1.3B failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1247, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1624, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 402, in _request_wrapper
+    response = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: 28f71854-7204-443b-90ce-281f8182c005)')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1377, in hf_hub_download
+    raise LocalEntryNotFoundError(
+huggingface_hub.utils._errors.LocalEntryNotFoundError: An error happened while trying to locate the file on the Hub and we cannot find the requested files in the local cache. Please check your connection and try again or make sure your Internet connection is on.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 733, in from_pretrained
+    config = AutoConfig.from_pretrained(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/configuration_auto.py", line 1048, in from_pretrained
+    config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 622, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 677, in _get_config_dict
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 470, in cached_file
+    raise EnvironmentError(
+OSError: We couldn't connect to 'https://huggingface.co' to load this file, couldn't find it in the cached files and it looks like CarperAI/FIM-NeoX-1.3B is not the path to a directory containing a file named config.json.
+Checkout your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+ByungjunKim/distilbert-base-uncased-finetuned-imdb failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'ByungjunKim/distilbert-base-uncased-finetuned-imdb'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'ByungjunKim/distilbert-base-uncased-finetuned-imdb' is the correct path to a directory containing all relevant files for a DistilBertTokenizerFast tokenizer.
+
+Gozdi/t5-efficient-small-nl16-samsum-exp1 failed
+Architectures: ['T5ForConditionalGeneration']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 117, in <module>
+    before_trace = model(**concrete_args)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/t5/modeling_t5.py", line 1521, in forward
+    decoder_outputs = self.decoder(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/t5/modeling_t5.py", line 1011, in forward
+    raise ValueError(f"You have to specify either {err_msg_prefix}input_ids or {err_msg_prefix}inputs_embeds")
+ValueError: You have to specify either decoder_input_ids or decoder_inputs_embeds
+
+Mascariddu8/posText_targetParagraphs_clickbait_model failed
+Architectures: ['T5ForConditionalGeneration']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'Mascariddu8/posText_targetParagraphs_clickbait_model'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'Mascariddu8/posText_targetParagraphs_clickbait_model' is the correct path to a directory containing all relevant files for a BigBirdTokenizerFast tokenizer.
+
+yliu337/noun_chunker failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 768, in from_pretrained
+    return tokenizer_class.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2024, in from_pretrained
+    return cls._from_pretrained(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2256, in _from_pretrained
+    tokenizer = cls(*init_inputs, **init_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/xlm_roberta/tokenization_xlm_roberta_fast.py", line 155, in __init__
+    super().__init__(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_fast.py", line 114, in __init__
+    fast_tokenizer = convert_slow_tokenizer(slow_tokenizer)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/convert_slow_tokenizer.py", line 1344, in convert_slow_tokenizer
+    return converter_class(transformer_tokenizer).converted()
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/convert_slow_tokenizer.py", line 459, in __init__
+    requires_backends(self, "protobuf")
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1247, in requires_backends
+    raise ImportError("".join(failed))
+ImportError: 
+XLMRobertaConverter requires the protobuf library but it was not found in your environment. Checkout the instructions on the
+installation page of its repo: https://github.com/protocolbuffers/protobuf/tree/master/python#installation and follow the ones
+that match your environment. Please note that you may need to restart your runtime after installation.
+
+
+paola-md/recipe-lr2e05-wd0.1-bs8 failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'paola-md/recipe-lr2e05-wd0.1-bs8'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'paola-md/recipe-lr2e05-wd0.1-bs8' is the correct path to a directory containing all relevant files for a RobertaTokenizerFast tokenizer.
+
+Suva/uptag-email-model-v2 failed
+Architectures: ['T5ForConditionalGeneration']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 117, in <module>
+    before_trace = model(**concrete_args)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/t5/modeling_t5.py", line 1521, in forward
+    decoder_outputs = self.decoder(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/t5/modeling_t5.py", line 1011, in forward
+    raise ValueError(f"You have to specify either {err_msg_prefix}input_ids or {err_msg_prefix}inputs_embeds")
+ValueError: You have to specify either decoder_input_ids or decoder_inputs_embeds
+
+Jeevesh8/bert-base-uncased_mnli_ft_61 failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 768, in from_pretrained
+    return tokenizer_class.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 1983, in from_pretrained
+    resolved_vocab_files[file_id] = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1461, in hf_hub_download
+    http_get(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 468, in http_get
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: a184b376-8735-4c3e-a148-7f1c758e6031)')
+
+m3/m3-experiment-roberta-base-rct-sample-add-v3 failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 270, in hf_raise_for_status
+    response.raise_for_status()
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: https://huggingface.co/m3/m3-experiment-roberta-base-rct-sample-add-v3/resolve/main/tokenizer_config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1374, in hf_hub_download
+    raise head_call_error
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1247, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1624, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 402, in _request_wrapper
+    response = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 426, in _request_wrapper
+    hf_raise_for_status(response)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 320, in hf_raise_for_status
+    raise RepositoryNotFoundError(message, response) from e
+huggingface_hub.utils._errors.RepositoryNotFoundError: 401 Client Error. (Request ID: Root=1-656ff604-58ce721b73946cef780d2256;e3637272-16f1-4f24-b041-00c69ddf33cc)
+
+Repository Not Found for url: https://huggingface.co/m3/m3-experiment-roberta-base-rct-sample-add-v3/resolve/main/tokenizer_config.json.
+Please make sure you specified the correct `repo_id` and `repo_type`.
+If you are trying to access a private or gated repo, make sure you are authenticated.
+Invalid username or password.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 718, in from_pretrained
+    tokenizer_config = get_tokenizer_config(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 550, in get_tokenizer_config
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 451, in cached_file
+    raise EnvironmentError(
+OSError: m3/m3-experiment-roberta-base-rct-sample-add-v3 is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`
+
+huggingtweets/yarbsalocin failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 1983, in from_pretrained
+    resolved_vocab_files[file_id] = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1461, in hf_hub_download
+    http_get(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 468, in http_get
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: 95340ebe-f623-4597-a128-021f5642e78c)')
+
+imosnoi/rofactura_4 failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'imosnoi/rofactura_4'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'imosnoi/rofactura_4' is the correct path to a directory containing all relevant files for a LayoutLMTokenizerFast tokenizer.
+
+AndrewZeng/S2KG-base failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 768, in from_pretrained
+    return tokenizer_class.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2024, in from_pretrained
+    return cls._from_pretrained(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2256, in _from_pretrained
+    tokenizer = cls(*init_inputs, **init_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/t5/tokenization_t5_fast.py", line 135, in __init__
+    super().__init__(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_fast.py", line 114, in __init__
+    fast_tokenizer = convert_slow_tokenizer(slow_tokenizer)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/convert_slow_tokenizer.py", line 1344, in convert_slow_tokenizer
+    return converter_class(transformer_tokenizer).converted()
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/convert_slow_tokenizer.py", line 459, in __init__
+    requires_backends(self, "protobuf")
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1247, in requires_backends
+    raise ImportError("".join(failed))
+ImportError: 
+T5Converter requires the protobuf library but it was not found in your environment. Checkout the instructions on the
+installation page of its repo: https://github.com/protocolbuffers/protobuf/tree/master/python#installation and follow the ones
+that match your environment. Please note that you may need to restart your runtime after installation.
+
+
+xma/gptj-small-train-test failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'xma/gptj-small-train-test'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'xma/gptj-small-train-test' is the correct path to a directory containing all relevant files for a DistilBertTokenizerFast tokenizer.
+
+mrm8488/roberta-large-finetuned-wsc failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2024, in from_pretrained
+    return cls._from_pretrained(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2056, in _from_pretrained
+    slow_tokenizer = (cls.slow_tokenizer_class)._from_pretrained(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2256, in _from_pretrained
+    tokenizer = cls(*init_inputs, **init_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/roberta/tokenization_roberta.py", line 227, in __init__
+    with open(merges_file, encoding="utf-8") as merges_handle:
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+
+Declan/FoxNews_model_v1 failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'Declan/FoxNews_model_v1'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'Declan/FoxNews_model_v1' is the correct path to a directory containing all relevant files for a BertTokenizerFast tokenizer.
+
+moyix/codegen-2B-multi-gptj failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 768, in from_pretrained
+    return tokenizer_class.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'moyix/codegen-2B-multi-gptj'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'moyix/codegen-2B-multi-gptj' is the correct path to a directory containing all relevant files for a CodeGenTokenizerFast tokenizer.
+
+negfir/bert_uncased_L-2_H-128_A-2wiki103 failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'negfir/bert_uncased_L-2_H-128_A-2wiki103'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'negfir/bert_uncased_L-2_H-128_A-2wiki103' is the correct path to a directory containing all relevant files for a BertTokenizerFast tokenizer.
+
+projecte-aina/m2m100-418M-ft-de-ca failed
+Architectures: ['M2M100ForConditionalGeneration']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 117, in <module>
+    before_trace = model(**concrete_args)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/m2m_100/modeling_m2m_100.py", line 1181, in forward
+    decoder_outputs = self.decoder(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/m2m_100/modeling_m2m_100.py", line 966, in forward
+    raise ValueError("You have to specify either decoder_input_ids or decoder_inputs_embeds")
+ValueError: You have to specify either decoder_input_ids or decoder_inputs_embeds
+
+ricardo-filho/bert-base-portuguese-cased-finetuned-ner failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 270, in hf_raise_for_status
+    response.raise_for_status()
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: https://huggingface.co/ricardo-filho/bert-base-portuguese-cased-finetuned-ner/resolve/main/tokenizer_config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1374, in hf_hub_download
+    raise head_call_error
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1247, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1624, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 402, in _request_wrapper
+    response = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 426, in _request_wrapper
+    hf_raise_for_status(response)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 320, in hf_raise_for_status
+    raise RepositoryNotFoundError(message, response) from e
+huggingface_hub.utils._errors.RepositoryNotFoundError: 401 Client Error. (Request ID: Root=1-656ff707-43e33e425c4ee949556437e1;36a812e1-d18c-4107-9e8d-23a78b4b0a44)
+
+Repository Not Found for url: https://huggingface.co/ricardo-filho/bert-base-portuguese-cased-finetuned-ner/resolve/main/tokenizer_config.json.
+Please make sure you specified the correct `repo_id` and `repo_type`.
+If you are trying to access a private or gated repo, make sure you are authenticated.
+Invalid username or password.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 718, in from_pretrained
+    tokenizer_config = get_tokenizer_config(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 550, in get_tokenizer_config
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 451, in cached_file
+    raise EnvironmentError(
+OSError: ricardo-filho/bert-base-portuguese-cased-finetuned-ner is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`
+
+PascalNotin/Tranception_Large failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'PascalNotin/Tranception_Large'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'PascalNotin/Tranception_Large' is the correct path to a directory containing all relevant files for a GPT2TokenizerFast tokenizer.
+
+alirezamsh/small100 failed
+Architectures: ['M2M100ForConditionalGeneration']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 117, in <module>
+    before_trace = model(**concrete_args)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/m2m_100/modeling_m2m_100.py", line 1181, in forward
+    decoder_outputs = self.decoder(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/m2m_100/modeling_m2m_100.py", line 966, in forward
+    raise ValueError("You have to specify either decoder_input_ids or decoder_inputs_embeds")
+ValueError: You have to specify either decoder_input_ids or decoder_inputs_embeds
+
+mideind/yfirlestur-icelandic-correction-byt5 failed
+Architectures: ['T5ForConditionalGeneration']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 117, in <module>
+    before_trace = model(**concrete_args)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/t5/modeling_t5.py", line 1521, in forward
+    decoder_outputs = self.decoder(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/t5/modeling_t5.py", line 1011, in forward
+    raise ValueError(f"You have to specify either {err_msg_prefix}input_ids or {err_msg_prefix}inputs_embeds")
+ValueError: You have to specify either decoder_input_ids or decoder_inputs_embeds
+
+Xuan-Rui/pet-100-p1 failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 1983, in from_pretrained
+    resolved_vocab_files[file_id] = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1461, in hf_hub_download
+    http_get(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 468, in http_get
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: e8d200cd-ca44-490d-a3ec-a7532b1c0cae)')
+
+aXhyra/hate_trained_final failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 768, in from_pretrained
+    return tokenizer_class.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 1983, in from_pretrained
+    resolved_vocab_files[file_id] = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1461, in hf_hub_download
+    http_get(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 468, in http_get
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: a0627225-7f69-4af2-bb41-94305f4e041d)')
+
+huggingtweets/realdonaldtrump failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 1983, in from_pretrained
+    resolved_vocab_files[file_id] = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1461, in hf_hub_download
+    http_get(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 468, in http_get
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: cbb836c4-bbd2-4f52-a49d-41d0e3fa0491)')
+
+mobashgr/NCBI-disease-Original-384-SciBERT failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 270, in hf_raise_for_status
+    response.raise_for_status()
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: https://huggingface.co/mobashgr/NCBI-disease-Original-384-SciBERT/resolve/main/tokenizer_config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1374, in hf_hub_download
+    raise head_call_error
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1247, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1624, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 402, in _request_wrapper
+    response = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 426, in _request_wrapper
+    hf_raise_for_status(response)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 320, in hf_raise_for_status
+    raise RepositoryNotFoundError(message, response) from e
+huggingface_hub.utils._errors.RepositoryNotFoundError: 401 Client Error. (Request ID: Root=1-656ff7dc-0c32d0c8526638bd1268c387;716a125c-7141-419a-9a08-f52a05cc8fe4)
+
+Repository Not Found for url: https://huggingface.co/mobashgr/NCBI-disease-Original-384-SciBERT/resolve/main/tokenizer_config.json.
+Please make sure you specified the correct `repo_id` and `repo_type`.
+If you are trying to access a private or gated repo, make sure you are authenticated.
+Invalid username or password.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 718, in from_pretrained
+    tokenizer_config = get_tokenizer_config(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 550, in get_tokenizer_config
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 451, in cached_file
+    raise EnvironmentError(
+OSError: mobashgr/NCBI-disease-Original-384-SciBERT is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`
+
+huggingtweets/modus_irrumandi failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 106, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 1947, in from_pretrained
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1461, in hf_hub_download
+    http_get(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 468, in http_get
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: 017ff5c6-0505-4dd1-91a9-1eab50c5aa10)')
+
+CEBaB/lstm.CEBaB.sa.3-class.exclusive.seed_77 failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'CEBaB/lstm.CEBaB.sa.3-class.exclusive.seed_77'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'CEBaB/lstm.CEBaB.sa.3-class.exclusive.seed_77' is the correct path to a directory containing all relevant files for a BertTokenizerFast tokenizer.
+
+mboth/distil-eng failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 113, in <module>
+    config = AutoConfig.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/configuration_auto.py", line 1048, in from_pretrained
+    config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 622, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 677, in _get_config_dict
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1461, in hf_hub_download
+    http_get(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 468, in http_get
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: 8b8becfd-f7bf-474c-82f9-cecb5c056309)')
+
+mobashgr/BioRED-Dis-WLT-128-BlueBERT-isns failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 768, in from_pretrained
+    return tokenizer_class.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 1983, in from_pretrained
+    resolved_vocab_files[file_id] = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1461, in hf_hub_download
+    http_get(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 468, in http_get
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: 68848978-fa9a-46bd-bdd4-1d8ca752c657)')
+
+Helsinki-NLP/opus-mt-alv-en failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 789, in from_pretrained
+    return tokenizer_class_py.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2024, in from_pretrained
+    return cls._from_pretrained(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2256, in _from_pretrained
+    tokenizer = cls(*init_inputs, **init_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/marian/tokenization_marian.py", line 150, in __init__
+    self.encoder = load_json(vocab)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/marian/tokenization_marian.py", line 412, in load_json
+    with open(path, "r") as f:
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+
+j0hngou/t5-base-finetuned-en-to-fr failed
+Architectures: ['T5ForConditionalGeneration']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 118, in <module>
+    before_trace = model(**concrete_args)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/t5/modeling_t5.py", line 1521, in forward
+    decoder_outputs = self.decoder(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/t5/modeling_t5.py", line 1011, in forward
+    raise ValueError(f"You have to specify either {err_msg_prefix}input_ids or {err_msg_prefix}inputs_embeds")
+ValueError: You have to specify either decoder_input_ids or decoder_inputs_embeds
+
+DTAI-KULeuven/robbert-2022-dutch-base failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 768, in from_pretrained
+    return tokenizer_class.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 1983, in from_pretrained
+    resolved_vocab_files[file_id] = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1461, in hf_hub_download
+    http_get(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 468, in http_get
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: 8d9a1ecd-7a0a-4689-9830-6873333bd8bc)')
+
+masakhane/m2m100_418M_en_tsn_news failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 768, in from_pretrained
+    return tokenizer_class.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2024, in from_pretrained
+    return cls._from_pretrained(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2256, in _from_pretrained
+    tokenizer = cls(*init_inputs, **init_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/m2m_100/tokenization_m2m_100.py", line 160, in __init__
+    self.encoder = load_json(vocab_file)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/m2m_100/tokenization_m2m_100.py", line 392, in load_json
+    with open(path, "r") as f:
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+
+pritoms/gpt-neo-125M-Byethon failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'pritoms/gpt-neo-125M-Byethon'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'pritoms/gpt-neo-125M-Byethon' is the correct path to a directory containing all relevant files for a GPT2TokenizerFast tokenizer.
+
+diegozs97/finetuned-chemprot-seed-0-60k failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'diegozs97/finetuned-chemprot-seed-0-60k'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'diegozs97/finetuned-chemprot-seed-0-60k' is the correct path to a directory containing all relevant files for a BertTokenizerFast tokenizer.
+
+anas-awadalla/roberta-large-data-seed-2 failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 1983, in from_pretrained
+    resolved_vocab_files[file_id] = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1461, in hf_hub_download
+    http_get(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 468, in http_get
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: 104b3aaf-58c9-49cd-a987-76883b5845c2)')
+
+TehranNLP-org/bert-base-uncased-mrpc-2e-5-42 failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 1947, in from_pretrained
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1461, in hf_hub_download
+    http_get(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 468, in http_get
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: d7e5afc2-a3a2-4c6d-907c-8cc432fc4164)')
+
+m3/m3-experiment-roberta-base-citation-intent-word-swapping-random-3 failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 270, in hf_raise_for_status
+    response.raise_for_status()
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: https://huggingface.co/m3/m3-experiment-roberta-base-citation-intent-word-swapping-random-3/resolve/main/tokenizer_config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1374, in hf_hub_download
+    raise head_call_error
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1247, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1624, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 402, in _request_wrapper
+    response = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 426, in _request_wrapper
+    hf_raise_for_status(response)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 320, in hf_raise_for_status
+    raise RepositoryNotFoundError(message, response) from e
+huggingface_hub.utils._errors.RepositoryNotFoundError: 401 Client Error. (Request ID: Root=1-656ff975-68f65ecf6d9975a16cacf239;8d5c4e4e-259d-464f-9cc5-57221a46dc3e)
+
+Repository Not Found for url: https://huggingface.co/m3/m3-experiment-roberta-base-citation-intent-word-swapping-random-3/resolve/main/tokenizer_config.json.
+Please make sure you specified the correct `repo_id` and `repo_type`.
+If you are trying to access a private or gated repo, make sure you are authenticated.
+Invalid username or password.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 718, in from_pretrained
+    tokenizer_config = get_tokenizer_config(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 550, in get_tokenizer_config
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 451, in cached_file
+    raise EnvironmentError(
+OSError: m3/m3-experiment-roberta-base-citation-intent-word-swapping-random-3 is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`
+
+diegozs97/finetuned-sciie-seed-1-2000k failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'diegozs97/finetuned-sciie-seed-1-2000k'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'diegozs97/finetuned-sciie-seed-1-2000k' is the correct path to a directory containing all relevant files for a BertTokenizerFast tokenizer.
+
+robb17/XLNet-finetuned-sentiment-analysis failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 270, in hf_raise_for_status
+    response.raise_for_status()
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: https://huggingface.co/robb17/XLNet-finetuned-sentiment-analysis/resolve/main/tokenizer_config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1374, in hf_hub_download
+    raise head_call_error
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1247, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1624, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 402, in _request_wrapper
+    response = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 426, in _request_wrapper
+    hf_raise_for_status(response)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 320, in hf_raise_for_status
+    raise RepositoryNotFoundError(message, response) from e
+huggingface_hub.utils._errors.RepositoryNotFoundError: 401 Client Error. (Request ID: Root=1-656ff9f9-73c0f462102fbfe047eda4e4;1fe47fc8-9209-4c32-98ba-46aba84868bc)
+
+Repository Not Found for url: https://huggingface.co/robb17/XLNet-finetuned-sentiment-analysis/resolve/main/tokenizer_config.json.
+Please make sure you specified the correct `repo_id` and `repo_type`.
+If you are trying to access a private or gated repo, make sure you are authenticated.
+Invalid username or password.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 718, in from_pretrained
+    tokenizer_config = get_tokenizer_config(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 550, in get_tokenizer_config
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 451, in cached_file
+    raise EnvironmentError(
+OSError: robb17/XLNet-finetuned-sentiment-analysis is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`
+
+AdapterHub/bert-base-uncased-pf-sick failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1247, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1624, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 402, in _request_wrapper
+    response = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: f5e9c813-fea6-4504-bb3f-eca426d8cef6)')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1377, in hf_hub_download
+    raise LocalEntryNotFoundError(
+huggingface_hub.utils._errors.LocalEntryNotFoundError: An error happened while trying to locate the file on the Hub and we cannot find the requested files in the local cache. Please check your connection and try again or make sure your Internet connection is on.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 733, in from_pretrained
+    config = AutoConfig.from_pretrained(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/configuration_auto.py", line 1048, in from_pretrained
+    config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 622, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 677, in _get_config_dict
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 470, in cached_file
+    raise EnvironmentError(
+OSError: We couldn't connect to 'https://huggingface.co' to load this file, couldn't find it in the cached files and it looks like AdapterHub/bert-base-uncased-pf-sick is not the path to a directory containing a file named config.json.
+Checkout your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+philschmid/my-onnx-repo failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 113, in <module>
+    config = AutoConfig.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/configuration_auto.py", line 1073, in from_pretrained
+    raise ValueError(
+ValueError: Unrecognized model in philschmid/my-onnx-repo. Should have a `model_type` key in its config.json, or contain one of the following strings in its name: albert, align, altclip, audio-spectrogram-transformer, autoformer, bark, bart, beit, bert, bert-generation, big_bird, bigbird_pegasus, biogpt, bit, blenderbot, blenderbot-small, blip, blip-2, bloom, bridgetower, bros, camembert, canine, chinese_clip, clap, clip, clipseg, code_llama, codegen, conditional_detr, convbert, convnext, convnextv2, cpmant, ctrl, cvt, data2vec-audio, data2vec-text, data2vec-vision, deberta, deberta-v2, decision_transformer, deformable_detr, deit, deta, detr, dinat, dinov2, distilbert, donut-swin, dpr, dpt, efficientformer, efficientnet, electra, encodec, encoder-decoder, ernie, ernie_m, esm, falcon, flaubert, flava, fnet, focalnet, fsmt, funnel, fuyu, git, glpn, gpt-sw3, gpt2, gpt_bigcode, gpt_neo, gpt_neox, gpt_neox_japanese, gptj, gptsan-japanese, graphormer, groupvit, hubert, ibert, idefics, imagegpt, informer, instructblip, jukebox, kosmos-2, layoutlm, layoutlmv2, layoutlmv3, led, levit, lilt, llama, longformer, longt5, luke, lxmert, m2m_100, marian, markuplm, mask2former, maskformer, maskformer-swin, mbart, mctct, mega, megatron-bert, mgp-str, mistral, mobilebert, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, mpnet, mpt, mra, mt5, musicgen, mvp, nat, nezha, nllb-moe, nougat, nystromformer, oneformer, open-llama, openai-gpt, opt, owlv2, owlvit, pegasus, pegasus_x, perceiver, persimmon, pix2struct, plbart, poolformer, pop2piano, prophetnet, pvt, qdqbert, rag, realm, reformer, regnet, rembert, resnet, retribert, roberta, roberta-prelayernorm, roc_bert, roformer, rwkv, sam, seamless_m4t, segformer, sew, sew-d, speech-encoder-decoder, speech_to_text, speech_to_text_2, speecht5, splinter, squeezebert, swiftformer, swin, swin2sr, swinv2, switch_transformers, t5, table-transformer, tapas, time_series_transformer, timesformer, timm_backbone, trajectory_transformer, transfo-xl, trocr, tvlt, umt5, unispeech, unispeech-sat, upernet, van, videomae, vilt, vision-encoder-decoder, vision-text-dual-encoder, visual_bert, vit, vit_hybrid, vit_mae, vit_msn, vitdet, vitmatte, vits, vivit, wav2vec2, wav2vec2-conformer, wavlm, whisper, xclip, xglm, xlm, xlm-prophetnet, xlm-roberta, xlm-roberta-xl, xlnet, xmod, yolos, yoso
+
+Hausax/Poetry_test failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1247, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1624, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 402, in _request_wrapper
+    response = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: 6b6987aa-d9fb-4705-9fac-9f0f95863709)')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1377, in hf_hub_download
+    raise LocalEntryNotFoundError(
+huggingface_hub.utils._errors.LocalEntryNotFoundError: An error happened while trying to locate the file on the Hub and we cannot find the requested files in the local cache. Please check your connection and try again or make sure your Internet connection is on.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 733, in from_pretrained
+    config = AutoConfig.from_pretrained(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/configuration_auto.py", line 1048, in from_pretrained
+    config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 622, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 677, in _get_config_dict
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 470, in cached_file
+    raise EnvironmentError(
+OSError: We couldn't connect to 'https://huggingface.co' to load this file, couldn't find it in the cached files and it looks like Hausax/Poetry_test is not the path to a directory containing a file named config.json.
+Checkout your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+tals/albert-xlarge-vitaminc-fever failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2024, in from_pretrained
+    return cls._from_pretrained(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2256, in _from_pretrained
+    tokenizer = cls(*init_inputs, **init_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/albert/tokenization_albert_fast.py", line 148, in __init__
+    super().__init__(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_fast.py", line 114, in __init__
+    fast_tokenizer = convert_slow_tokenizer(slow_tokenizer)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/convert_slow_tokenizer.py", line 1344, in convert_slow_tokenizer
+    return converter_class(transformer_tokenizer).converted()
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/convert_slow_tokenizer.py", line 459, in __init__
+    requires_backends(self, "protobuf")
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1247, in requires_backends
+    raise ImportError("".join(failed))
+ImportError: 
+AlbertConverter requires the protobuf library but it was not found in your environment. Checkout the instructions on the
+installation page of its repo: https://github.com/protocolbuffers/protobuf/tree/master/python#installation and follow the ones
+that match your environment. Please note that you may need to restart your runtime after installation.
+
+
+Nausheen/bert-finetuned-squad-accelerate failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 1947, in from_pretrained
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1461, in hf_hub_download
+    http_get(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 468, in http_get
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: b17ff14f-9ee0-44d3-bde3-cd7d8a6efe9f)')
+
+elopezlopez/Bio_ClinicalBERT_fold_6_ternary_v1 failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 113, in <module>
+    config = AutoConfig.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/configuration_auto.py", line 1048, in from_pretrained
+    config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 622, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 677, in _get_config_dict
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1461, in hf_hub_download
+    http_get(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 468, in http_get
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: 72838f03-04d5-48cb-ade5-5747b3486b9c)')
+
+akreal/mbart-large-50-finetuned-portmedia-dom failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1247, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1624, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 402, in _request_wrapper
+    response = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: 9837739e-d4bd-4b14-a0cf-7885e2122c7a)')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1377, in hf_hub_download
+    raise LocalEntryNotFoundError(
+huggingface_hub.utils._errors.LocalEntryNotFoundError: An error happened while trying to locate the file on the Hub and we cannot find the requested files in the local cache. Please check your connection and try again or make sure your Internet connection is on.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 733, in from_pretrained
+    config = AutoConfig.from_pretrained(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/configuration_auto.py", line 1048, in from_pretrained
+    config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 622, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/configuration_utils.py", line 677, in _get_config_dict
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 470, in cached_file
+    raise EnvironmentError(
+OSError: We couldn't connect to 'https://huggingface.co' to load this file, couldn't find it in the cached files and it looks like akreal/mbart-large-50-finetuned-portmedia-dom is not the path to a directory containing a file named config.json.
+Checkout your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+yanaiela/roberta-base-epoch_23 failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 1374, in getresponse
+    response.begin()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/anaconda/envs/amc/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/anaconda/envs/amc/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/anaconda/envs/amc/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/urllib3/connectionpool.py", line 340, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 768, in from_pretrained
+    return tokenizer_class.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 1983, in from_pretrained
+    resolved_vocab_files[file_id] = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1461, in hf_hub_download
+    http_get(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 468, in http_get
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 425, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: cb951b49-7006-4078-801d-a68121097188)')
+
+Helsinki-NLP/opus-mt-en-alv failed
+Architectures: ['MarianMTModel']
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 118, in <module>
+    before_trace = model(**concrete_args)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/marian/modeling_marian.py", line 1203, in forward
+    decoder_outputs = self.decoder(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/marian/modeling_marian.py", line 932, in forward
+    raise ValueError("You have to specify either decoder_input_ids or decoder_inputs_embeds")
+ValueError: You have to specify either decoder_input_ids or decoder_inputs_embeds
+
+SimoC/distilbert-base-uncased-finetuned-emotion failed
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 270, in hf_raise_for_status
+    response.raise_for_status()
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: https://huggingface.co/SimoC/distilbert-base-uncased-finetuned-emotion/resolve/main/tokenizer_config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 430, in cached_file
+    resolved_file = hf_hub_download(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1374, in hf_hub_download
+    raise head_call_error
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1247, in hf_hub_download
+    metadata = get_hf_file_metadata(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1624, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 402, in _request_wrapper
+    response = _request_wrapper(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 426, in _request_wrapper
+    hf_raise_for_status(response)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 320, in hf_raise_for_status
+    raise RepositoryNotFoundError(message, response) from e
+huggingface_hub.utils._errors.RepositoryNotFoundError: 401 Client Error. (Request ID: Root=1-656ffad6-05620886141cfa471ec2356a;124100ef-4e65-4303-91fc-0149f2f97522)
+
+Repository Not Found for url: https://huggingface.co/SimoC/distilbert-base-uncased-finetuned-emotion/resolve/main/tokenizer_config.json.
+Please make sure you specified the correct `repo_id` and `repo_type`.
+If you are trying to access a private or gated repo, make sure you are authenticated.
+Invalid username or password.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 718, in from_pretrained
+    tokenizer_config = get_tokenizer_config(pretrained_model_name_or_path, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 550, in get_tokenizer_config
+    resolved_config_file = cached_file(
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/utils/hub.py", line 451, in cached_file
+    raise EnvironmentError(
+OSError: SimoC/distilbert-base-uncased-finetuned-emotion is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `huggingface-cli login` or by passing `token=<your_token>`
+
+ParkSaeroyi/distilroberta-base-finetuned-wikitext2 failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'ParkSaeroyi/distilroberta-base-finetuned-wikitext2'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'ParkSaeroyi/distilroberta-base-finetuned-wikitext2' is the correct path to a directory containing all relevant files for a RobertaTokenizerFast tokenizer.
+
+ghadeermobasher/BC5CDR-disease-WLT-512-SciBERT-t failed
+Traceback (most recent call last):
+  File "/home/yileiyang/workspace/auto-model-compiler/graph/concrete_trace_nlp.py", line 107, in <module>
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 786, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/anaconda/envs/amc/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2008, in from_pretrained
+    raise EnvironmentError(
+OSError: Can't load tokenizer for 'ghadeermobasher/BC5CDR-disease-WLT-512-SciBERT-t'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'ghadeermobasher/BC5CDR-disease-WLT-512-SciBERT-t' is the correct path to a directory containing all relevant files for a BertTokenizerFast tokenizer.
