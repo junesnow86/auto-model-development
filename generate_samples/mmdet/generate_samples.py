@@ -1,25 +1,25 @@
 import os
 import pickle
 import sys
-sys.path.append("/home/v-junliang/DNNGen/auto_model_dev")
+sys.path.append("/home/yileiyang/workspace/DNNGen/auto_model_dev")
 from mapping.utils import Mapping
 from generate_graph.utils import Sample
-sys.path.append("/home/v-junliang/DNNGen/auto_model_dev/mapping")
+sys.path.append("/home/yileiyang/workspace/DNNGen/auto_model_dev/mapping")
 
 def get_dataset_desc(dataset):
-    root = "/data/data0/v-junliang/DNNGen/auto_model_dev/dataset_desc"
+    root = "/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/dataset_desc"
     with open(os.path.join(root, dataset), "rb") as f:
         ds_desc = pickle.load(f)
     return ds_desc.name, ds_desc.content
 
 def get_task_desc(task):
-    root = "/data/data0/v-junliang/DNNGen/auto_model_dev/task_desc"
+    root = "/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/task_desc"
     with open(os.path.join(root, task), "rb") as f:
         task_desc = pickle.load(f)
     return task_desc.name, task_desc.content
 
 def get_graphml(model_name):
-    root = "/data/data0/v-junliang/DNNGen/auto_model_dev/xml/mmdet"
+    root = "/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/xml/mmdet"
     with open(os.path.join(root, model_name)) as f:
         return f.readline()
 
@@ -33,8 +33,8 @@ def create_sample(mapping: Mapping):
     return Sample(name, task_standard_name, task_description, ds_standard_name, ds_description, graphml)
 
 if __name__ == "__main__":
-    sample_save_root = "/data/data0/v-junliang/DNNGen/auto_model_dev/samples/mmdet"
-    mapping_root = "/data/data0/v-junliang/DNNGen/auto_model_dev/mapping/mmdet"
+    sample_save_root = "/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/samples/mmdet"
+    mapping_root = "/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/mapping/mmdet"
     for task in os.listdir(mapping_root):
         if not os.path.exists(os.path.join(sample_save_root, task)):
             os.mkdir(os.path.join(sample_save_root, task))

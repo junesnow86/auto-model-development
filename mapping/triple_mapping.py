@@ -3,7 +3,7 @@ import json
 
 
 def read_tasks(dataset_index_name):
-    read_root = "/data/data0/v-junliang/DNNGen/auto_model_dev/ds2task"
+    read_root = "/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/ds2task"
     try:
         with open(os.path.join(read_root, dataset_index_name)) as f:
             tasks = eval(f.readline())
@@ -17,8 +17,8 @@ if __name__ == "__main__":
         model_name_set = eval(f.read())
     print("#model:", len(model_name_set))
 
-    model2ds_dir = "/data/data0/v-junliang/DNNGen/auto_model_dev/mapping/huggingface/model_to_datasets"
-    triple_save_dir = "/data/data0/v-junliang/DNNGen/auto_model_dev/mapping/huggingface/triples"
+    model2ds_dir = "/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/mapping/huggingface/model_to_datasets"
+    triple_save_dir = "/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/mapping/huggingface/triples"
     total = 0
     mapped = 0
     for model_name in model_name_set:

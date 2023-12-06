@@ -11,14 +11,11 @@ import logging
 import operator
 import functools
 import builtins
-import traceback
-import importlib.util
 
 from itertools import chain
-from types import FunctionType, MethodDescriptorType, MethodType, MethodWrapperType, ModuleType
+from types import BuiltinMethodType, FunctionType, MethodDescriptorType, MethodType, MethodWrapperType, ModuleType
 from typing import Any, Dict, Iterable, Iterator, Optional, Set, Tuple, Type, List, Callable, Union
 from contextlib import contextmanager
-from pathlib import Path
 
 import torch
 from torch._C import ScriptObject
@@ -89,9 +86,6 @@ from .utils import (
 
     _orig_agfunc_apply,
     _orig_torch_assert,
-    _orig_torch_no_grad,
-    _orig_torch_no_grad_enter,
-    _orig_torch_no_grad_exit,
 
     _orig_type,
     _orig_isinstance,
@@ -128,17 +122,18 @@ from .utils import (
 
     _orig_node_is_impure,
 )
-from .utils import FrameRecord, ExtraSEFPatcher, extract_results_metadata, EmptyResult
+
+# some side effectful functions that should not be deleted during dead code elimination
+# there may be more than listed here
+extra_side_effectful_functions = {
+    operator.setitem,
+    builtins.next,
+}
+_side_effectful_functions = _side_effectful_functions.union(extra_side_effectful_functions)
 
 # pyright: reportGeneralTypeIssues=false
 _logger = logging.getLogger(__name__)
 HAS_VARSTUFF = inspect.CO_VARARGS | inspect.CO_VARKEYWORDS
-
-
-def is_autograd_apply(func) -> bool:
-    return getattr(func, '__name__', None) == 'apply' \
-        and _orig_isinstance(getattr(func, '__self__', None), Type) and issubclass(func.__self__, torch.autograd.Function)
-
 
 @compatibility(is_backward_compatible=True)
 class ConcreteTracer(TracerBase):
@@ -245,8 +240,7 @@ class ConcreteTracer(TracerBase):
     default_autowrap_leaf_class: Dict[Type, Tuple[List[Tuple[Union[ModuleType, Type], str]], bool]] = {
         # class
         _orig_bool:                 ([], False),
-        # we don't want zip appear as a node in the graph
-        # _orig_zip:                  ([], False),
+        _orig_zip:                  ([], False),
         _orig_int:                  ([], False),
 
         # iterable class
@@ -262,7 +256,7 @@ class ConcreteTracer(TracerBase):
     }
 
     @compatibility(is_backward_compatible=True)
-    def __init__(self, cpu_offload = False, record_frames = False):
+    def __init__(self, cpu_offload = False):
         """
         similar to _symbolic_trace.Tracer.__init__.
         remove the 'param_shapes_constant' because we can get real shape when executing.
@@ -272,7 +266,6 @@ class ConcreteTracer(TracerBase):
         self.module_stack = collections.OrderedDict()
         self.node_name_to_scope = {}
         self.cpu_offload = cpu_offload
-        self.record_frames = record_frames
 
     @contextmanager
     def do_temp_disable(self, call=False, attr=False, agfunc_apply=False):
@@ -341,14 +334,14 @@ class ConcreteTracer(TracerBase):
             if kind == 'call_function':
                 assert isinstance(target, Callable)
                 fn = target
-                if _orig_getattr(fn, '__module__', None) != self.__module__ \
+                if _orig_getattr(fn, '__module__', None) != 'nni.common.concrete_trace_utils.concrete_tracer' \
                     and hasattr(fn, '__globals__'):
                     _autowrap_check(self, fn.__globals__, self._autowrap_function_ids, self.autowrap_leaf_pairs, self.agfunc_dict)
                 return OperatorPatcherContext.patch_run(fn, *args, **kwargs)
             elif kind == 'call_method':
                 self_obj, *args_tail = args
                 fn = _orig_getattr(self_obj, target)
-                if _orig_getattr(fn, '__module__', None) != self.__module__ \
+                if _orig_getattr(fn, '__module__', None) != 'nni.common.concrete_trace_utils.concrete_tracer' \
                     and hasattr(fn, '__globals__'):
                     _autowrap_check(self, fn.__globals__, self._autowrap_function_ids, self.autowrap_leaf_pairs, self.agfunc_dict)
                 result = fn(*args_tail, **kwargs)
@@ -357,7 +350,7 @@ class ConcreteTracer(TracerBase):
                 mod = self.fetch_attr(target)
                 if self.cpu_offload:
                     mod.cuda()  # how it works in ddp?
-                if _orig_getattr(mod, '__module__', None) != self.__module__ \
+                if _orig_getattr(mod, '__module__', None) != 'nni.common.concrete_trace_utils.concrete_tracer' \
                     and hasattr(mod, '__globals__'):
                     _autowrap_check(self, mod.__globals__, self._autowrap_function_ids, self.autowrap_leaf_pairs, self.agfunc_dict)
                 result = OperatorPatcherContext.patch_run(mod, *args, **kwargs)
@@ -373,16 +366,10 @@ class ConcreteTracer(TracerBase):
         with self.do_temp_disable(call=True):
             result = run(kind, target, args, kwargs)
             if self.cpu_offload:
-                # move back arguments to cpu if cpu_offload
-                args = tree_map(to_cpu, args)
-                kwargs = tree_map(to_cpu, kwargs)
                 if isinstance(result, torch.Tensor):
                     result = result.cpu()
                 elif isinstance(result, (list, dict, tuple)):
                     result = tree_map(to_cpu, result)
-                elif isinstance(result, (int, bool, torch.device, torch.dtype, _orig_torch_no_grad)) or result is None:
-                    # avoid too noisy warning
-                    pass
                 else:
                     _logger.warning(f"result of target {target} is {type(result)}, which is not a common behavior.")
 
@@ -394,7 +381,7 @@ class ConcreteTracer(TracerBase):
     @compatibility(is_backward_compatible=True)
     def create_node(self, kind : str, target : Target,
                     args : Tuple[Argument, ...], kwargs : Dict[str, Argument], name : Optional[str] = None,
-                    type_expr : Optional[Any] = None, node_result: Any = EmptyResult) -> Node:
+                    type_expr : Optional[Any] = None) -> Node:
         """
         This method is almost the same as the one in `TracerBase` class of Pytorch2.0.
         Add it here because this method of Pytorch1.13 and older version
@@ -415,7 +402,6 @@ class ConcreteTracer(TracerBase):
             node.meta['nn_module_stack'] = copy.copy(self.module_stack)
         else:
             node.meta['nn_module_stack'] = collections.OrderedDict()
-        extract_results_metadata(node_result, node)
         return node
 
     @compatibility(is_backward_compatible=True)
@@ -433,12 +419,12 @@ class ConcreteTracer(TracerBase):
         similar to _symbolic_trace.Tracer.create_proxy.
         use the 'run_target' to actually execute the code, and store the value in 'value' field.
         """
-        def unwrap(obj: Any):
+        def upwrapper(obj: Any):
             while _orig_isinstance(obj, ep.ConcreteProxy):
                 obj = obj.value
             return obj
-        args_unwrapped = ep.map_aggregate_not_proxy(args, unwrap)
-        kwargs_unwrapped = ep.map_aggregate_not_proxy(kwargs, unwrap)
+        args_unwrapped = ep.map_aggregate_not_proxy(args, upwrapper)
+        kwargs_unwrapped = ep.map_aggregate_not_proxy(kwargs, upwrapper)
 
         # real value by execution
         value_unwrapped = self.run_target(kind, target, args_unwrapped, kwargs_unwrapped)
@@ -448,24 +434,7 @@ class ConcreteTracer(TracerBase):
         assert isinstance(args_, tuple)
         assert isinstance(kwargs_, dict)
 
-        node = self.create_node(kind, target, args_, kwargs_, name, type_expr, value_unwrapped)
-
-        if self.record_frames and kind != 'placeholder':
-            with self.do_temp_disable(True, True, True):
-                # record code frame, include filename, line number, and function name
-                frame_record = FrameRecord(None, None, None, None)
-                cube_path = str(Path(importlib.util.find_spec('cube').origin).parent) + '/'  # the cube path
-                torch_path = str(Path(importlib.util.find_spec('torch').origin).parent) + '/'  # the torch path
-                ignore_dirs = [cube_path, torch_path]
-                for frame in traceback.extract_stack()[-2::-1]:
-                    if any(p in frame.filename for p in ignore_dirs):
-                        continue
-                    frame_record.filename = frame.filename
-                    frame_record.lineno = frame.lineno
-                    frame_record.line = frame.line
-                    frame_record.name = frame.name
-                    break
-                node.meta['frame_record'] = frame_record
+        node = self.create_node(kind, target, args_, kwargs_, name, type_expr)
 
         proxy = self.proxy(value_unwrapped, node)
         return proxy
@@ -483,16 +452,16 @@ class ConcreteTracer(TracerBase):
         if isinstance(a, torch.nn.Parameter):
             for n, p in self.root.named_parameters():
                 if a is p:
-                    return self.create_node('get_attr', n, (), {}, node_result=a)
+                    return self.create_node('get_attr', n, (), {})
             raise NameError('parameter is not a member of this module')
         elif isinstance(a, torch.Tensor):
             for n_, p_ in self.root.named_buffers():
                 if a is p_:
-                    return self.create_node('get_attr', n_, (), {}, node_result=a)
+                    return self.create_node('get_attr', n_, (), {})
         elif isinstance(a, torch.nn.Module):
             for n_, p_ in self.root.named_modules():
                 if a is p_:
-                    return self.create_node('get_attr', n_, (), {}, node_result=a)
+                    return self.create_node('get_attr', n_, (), {})
         # for slice
         if isinstance(a, slice):
             start = self.create_arg(a.start)
@@ -501,14 +470,14 @@ class ConcreteTracer(TracerBase):
             if _orig_isinstance(start, Node)\
                 or _orig_isinstance(stop, Node)\
                 or _orig_isinstance(step, Node):
-                return self.create_node('call_function', _orig_slice, (start, stop, step), {}, node_result=a)
+                return self.create_node('call_function', _orig_slice, (start, stop, step), {})
             else:
                 return a
         # For NamedTuple instances that appear literally as args, we emit
         # a node to construct the NamedTuple and use that Node as the argument.
         if isinstance(a, tuple) and hasattr(a, '_fields'):
             args = tuple(self.create_arg(elem) for elem in a)
-            return self.create_node('call_function', a.__class__, args, {}, node_result=a)
+            return self.create_node('call_function', a.__class__, args, {})
 
         # Tensors do not have a reliable string repr() from which they can be
         # constructed (and we probably don't want to rely on that, either), so
@@ -532,7 +501,7 @@ class ConcreteTracer(TracerBase):
                 self.tensor_attrs[a] = qualname
                 setattr(self.root, qualname, a)
 
-            return self.create_node('get_attr', qualname, (), {}, node_result=a)
+            return self.create_node('get_attr', qualname, (), {})
 
         if _orig_type(a) in _proxyable_classes:
             # This is an instance of a proxyable class for which we did not
@@ -547,7 +516,7 @@ class ConcreteTracer(TracerBase):
                 i += 1
             setattr(self.root, qualname, a)
 
-            return self.create_node('get_attr', qualname, (), {}, node_result=a)
+            return self.create_node('get_attr', qualname, (), {})
 
         if isinstance(a, (torch.autograd.function.Function, torch.autograd.function.FunctionMeta)):
             return a
@@ -559,7 +528,7 @@ class ConcreteTracer(TracerBase):
         """
         similar to _symbolic_trace.Tracer.is_leaf_module
         """
-        return (m.__module__.startswith('torch.nn.functional') and not _orig_isinstance(m, (Sequential, ModuleList, ModuleDict)))\
+        return (m.__module__.startswith('torch.nn') and not _orig_isinstance(m, (Sequential, ModuleList, ModuleDict)))\
             or _orig_isinstance(m, self.leaf_module)
 
     @compatibility(is_backward_compatible=True)
@@ -608,7 +577,6 @@ class ConcreteTracer(TracerBase):
         # defined via ``functools.wraps``. In this case, the outer code object
         # will likely not contain the actual parameters we care about, so unwrap
         # the function to get to the innermost callable.
-        # TODO: keyward-only arguments are not supported now
         fn_for_analysis = inspect.unwrap(root_fn)
         default_value_list = fn_for_analysis.__defaults__
         if default_value_list is None:
@@ -805,23 +773,15 @@ class ConcreteTracer(TracerBase):
                     attr_val = _orig_module_getattribute(mod, attr)
                 except AttributeError:
                     attr_val = _orig_module_getattr(mod, attr)
-            if _orig_isinstance(attr_val, ep.ConcreteProxy):
-                warn_msg = f'Detected {self.the_path_of_middle_class[id(mod)]}.{attr} is a ConcreteProxy, ' + \
-                    'this is usually caused by directly assigning the return value of some leaf function to the attribute of the module. ' + \
-                    'Please note that this writing method may cause some trace errors.'
-                _logger.warning(warn_msg)
-            if callable(attr_val) and not _orig_isinstance(attr_val, ep.ConcreteProxy):
+            if callable(attr_val):
                 if attr_val in self.wrapped_leaf:
                     return self.wrapped_leaf[attr_val][1]
                 return attr_val
-            # using isinstance instead of _orig_isinstance to judge whether
-            # the ConcreteProxy.value is the following three types if the attr_val is a ConcreteProxy
-            elif isinstance(attr_val, (_orig_tuple, _orig_list)):
-                if self.the_path_of_middle_class[id(mod)] == '':
-                    return self.create_proxy('get_attr', f'{attr}', (), {})
-                else:
-                    return self.create_proxy('get_attr', f'{self.the_path_of_middle_class[id(mod)]}.{attr}', (), {})
             elif attr in self.default_module_getattr:
+                path = self.the_path_of_middle_class[id(mod)]
+                path = path + '.' if path else ''
+                return self.create_proxy('get_attr', f'{path + attr}', (), {})
+            elif _orig_isinstance(attr_val, (_orig_tuple, _orig_list)):
                 if self.the_path_of_middle_class[id(mod)] == '':
                     return self.create_proxy('get_attr', f'{attr}', (), {})
                 else:
@@ -965,18 +925,6 @@ class ConcreteTracer(TracerBase):
                 condition = condition.value
             return _orig_torch_assert(condition, message)
 
-        @functools.wraps(_orig_torch_no_grad)
-        def torch_no_grad_wrapper():
-            return self.create_proxy('call_function', _orig_torch_no_grad, (), {})
-
-        @functools.wraps(_orig_torch_no_grad_enter)
-        def torch_no_grad_enter_wrapper(no_grad):
-            return self.create_proxy('call_function', _orig_torch_no_grad_enter, (no_grad,), {})
-
-        @functools.wraps(_orig_torch_no_grad_exit)
-        def torch_no_grad_exit_wrapper(no_grad, exc_type, exc_value, traceback):
-            return self.create_proxy('call_function', _orig_torch_no_grad_exit, (no_grad, exc_type, exc_value, traceback,), {})
-
         self.agfunc_dict: dict[Type, Any] = {}
         self.autowrap_leaf_pairs = {
             id(_orig_torch_assert): torch_assert_wrapper,
@@ -984,7 +932,8 @@ class ConcreteTracer(TracerBase):
         self.wrapped_leaf = dict()
 
         for func, (positions, is_force_trace, to_func) in self.autowrap_leaf_function.items():
-            if is_autograd_apply(func):
+            if _orig_isinstance(func, BuiltinMethodType) and getattr(func, '__name__', None) == 'apply'\
+                and _orig_isinstance(getattr(func, '__self__', None), Type) and issubclass(func.__self__, torch.autograd.Function):
                 # torch.autograd.function
                 assert to_func == None, '<subclass of torch.autograd.Function>.apply should set to_func to None!'
                 if func.__self__ not in self.agfunc_dict:
@@ -1004,8 +953,7 @@ class ConcreteTracer(TracerBase):
                         wrapped = _create_wrapped_leaf_func(self, func, to_func)
                 elif _orig_isinstance(func, (MethodDescriptorType, MethodWrapperType)):
                     wrapped = _create_wrapped_leaf_method(self, func, func.__name__, to_func)
-                elif func.__name__ != func.__qualname__ and func.__qualname__ != 'boolean_dispatch.<locals>.fn' \
-                    and not func.__qualname__.startswith('PyCapsule'):
+                elif func.__name__ != func.__qualname__ and func.__qualname__ != 'boolean_dispatch.<locals>.fn':
                     # method
                     if func.__module__.startswith('_') and func.__module__ != '__main__':
                         path = sys.modules[func.__module__[1:]]
@@ -1114,11 +1062,6 @@ class ConcreteTracer(TracerBase):
                 self.patcher.patch_method(torch.nn.Module, "__call__", module_call_wrapper, deduplicate=False)
                 self.patcher.patch_method(torch.autograd.Function, "apply", agfunc_apply_wrapper, deduplicate=False)
                 self.patcher.patch_method(torch, "_assert", torch_assert_wrapper, deduplicate=False)
-                # if class member functions and the class need to be wrapped together,
-                # wrap the member functions before wrap the class.
-                self.patcher.patch_method(_orig_torch_no_grad, "__enter__", torch_no_grad_enter_wrapper, deduplicate=False)
-                self.patcher.patch_method(_orig_torch_no_grad, "__exit__", torch_no_grad_exit_wrapper, deduplicate=False)
-                self.patcher.patch_method(torch, "no_grad", torch_no_grad_wrapper, deduplicate=False)
 
                 self.patcher.patch_method(builtins, "map", map_wrapper, deduplicate=False)
                 self.patcher.patch_method(builtins, "enumerate", enumerate_wrapper, deduplicate=False)
@@ -1138,14 +1081,9 @@ class ConcreteTracer(TracerBase):
                 for module in self._autowrap_search:
                     _autowrap_check(self, module.__dict__, self._autowrap_function_ids, self.autowrap_leaf_pairs, self.agfunc_dict)
                 with OperatorPatcherContext(self, use_operator_patch, operator_patch_backlist):
-                    results = OperatorPatcherContext.patch_run(fn, *args, *more_args, **kwargs)
-                    # we should unwrap proxy to the original value in the results when we record it to node.meta['tensor_meta']
-                    def unwrap(obj: Any):
-                        while _orig_isinstance(obj, ep.ConcreteProxy):
-                            obj = obj.value
-                        return obj
-                    self.create_node('output', 'output', (self.create_arg(results),),
-                                     {}, type_expr=fn.__annotations__.get('return', None), node_result=ep.map_aggregate_not_proxy(results, unwrap))
+                    self.create_node('output', 'output',
+                                    (self.create_arg(OperatorPatcherContext.patch_run(fn, *args, *more_args, **kwargs)),),
+                                    {}, type_expr=fn.__annotations__.get('return', None))
         finally:
             # for cuda versions of pytorch, autograd.Function.apply should be reverted manually
             delattr(torch.autograd.Function, 'apply')
@@ -1227,7 +1165,8 @@ def _autowrap_check(tracer: ConcreteTracer, frame_dict : Dict[str, Any], functio
                     patcher.patch(frame_dict, name, _create_wrapped_func(value))
                 elif id(value) in function_pairs:
                     patcher.patch(frame_dict, name, function_pairs[id(value)])
-                elif is_autograd_apply(value):
+                elif _orig_isinstance(value, BuiltinMethodType) and getattr(value, '__name__', None) == 'apply'\
+                    and _orig_isinstance(getattr(value, '__self__', None), Type) and issubclass(value.__self__, torch.autograd.Function):
                     # torch.autograd.function
                     if value.__self__ not in agfunc_dict:
                         agfunc_dict[value.__self__] = _create_wrapped_leaf_func(tracer, value, value)
@@ -1307,33 +1246,17 @@ class MagicMethodPatcher:
 
     @staticmethod
     def find_module_of_method_new(orig_method: Callable[..., Any]) -> str:
-        if is_autograd_apply(orig_method):
-            # for torch.autograd.Function
-            return f'{orig_method.__self__.__module__}.{orig_method.__self__.__name__}'
-
         name = orig_method.__name__
         module = orig_method.__module__
-        # if hasattr(orig_method, '__qualname__') and isinstance(orig_method.__qualname__, str):
-        #     # if there has '.' in '__qualname__', it means this function is in a nested structure,
-        #     #
-        #     # for example, it is a method / function in a class:
-        #     # torch.nn.Linear.forward.__module__ = torch.nn
-        #     # torch.nn.Linear.forward.__name__ = forward
-        #     # torch.nn.Linear.forward.__qualname__ = Linear.forward
-        #     #
-        #     # And in fx.node qualified name creating rule, the module also should include the class name,
-        #     # in this example, the returned module should be `torch.nn.Linear`.
-        #     # It is not the original meaning of a obj's module, but we need this workaround to reuse fx node.
-        #     splited_names = orig_method.__qualname__.split('.')
-        #     class_name, name = splited_names[:-1], splited_names[-1]
-        #     module = '.'.join([module] + class_name)
-        if module == 'torch.autograd.grad_mode' and name in ['__enter__', '__exit__']:
-            return 'torch.autograd.grad_mode.no_grad'
         if module is not None:
             return module
-        if hasattr(orig_method, '__qualname__')\
+        elif hasattr(orig_method, '__qualname__')\
             and isinstance(orig_method.__qualname__, str) and orig_method.__qualname__.startswith('_VariableFunctionsClass.'):
             return 'torch._C._VariableFunctions'
+        elif hasattr(orig_method, '__self__')\
+            and isinstance(orig_method.__self__, Type) and issubclass(orig_method.__self__, torch.autograd.Function):
+            # for torch.autograd.Function
+            return f'{orig_method.__self__.__module__}.{orig_method.__self__.__name__}'
         for guess in [torch, getattr(torch.nn, 'functional')]:
             if getattr(guess, name, None) is orig_method:
                 return guess.__name__
@@ -1341,7 +1264,8 @@ class MagicMethodPatcher:
 
     @staticmethod
     def format_import_statement_new(name: str, obj: Any, importer) -> str:
-        if is_autograd_apply(obj):  # type: ignore
+        if isinstance(obj, BuiltinMethodType) and getattr(obj, '__name__', None) == 'apply'\
+            and isinstance(getattr(obj, '__self__', None), Type) and issubclass(obj.__self__, torch.autograd.Function):  # type: ignore
             # torch.autograd.function
             return MagicMethodPatcher.format_import_statement_ori(name, obj.__self__, importer) + f'\n{name} = {name}.apply'
         return MagicMethodPatcher.format_import_statement_ori(name, obj, importer)
@@ -1510,9 +1434,6 @@ def _retain_weight_consistency(root: torch.nn.Module):
 
 @functools.wraps(_orig_node_is_impure)
 def node_is_impure_wrapper(node):
-    if is_useless_no_grad_node(node):
-        return False
-
     if node.op in {"placeholder", "output"}:
         return True
 
@@ -1534,18 +1455,6 @@ def node_is_impure_wrapper(node):
 
     return False
 
-def is_useless_no_grad_node(node: Node):
-    # keep the no_gard related nodes, but except useless situation: no node between __enter__ and __exit__
-    if node.op == 'call_function':
-        if node.target is _orig_torch_no_grad_exit:
-            if node.prev.target is _orig_torch_no_grad_enter and node.prev.prev.target is _orig_torch_no_grad:
-                setattr(node.prev, '_is_impure', False)
-                setattr(node.prev.prev, '_is_impure', False)
-                return True
-        if node.target is _orig_torch_no_grad_enter or node.target is _orig_torch_no_grad:
-            return not getattr(node, '_is_impure', True)
-    return False
-
 def concrete_trace(root : Union[torch.nn.Module, Callable[..., Any]],
                    concrete_args: Union[Dict[str, Any], Tuple],
                    *,
@@ -1556,12 +1465,10 @@ def concrete_trace(root : Union[torch.nn.Module, Callable[..., Any]],
                    autowrap_leaf_function = None,
                    autowrap_leaf_class = None,
                    leaf_module: Tuple | None = None,
-                   fake_middle_class: Tuple | None = None,
-                   dce: bool = True,
-                   dce_ignored_function: Set[Callable] | None = None,
-                   cpu_offload: bool = False,
-                   trace_twice: bool = False,
-                   record_frames: bool = False,
+                   fake_middle_class = None,
+                   dce = True,
+                   cpu_offload = False,
+                   trace_twice = False,
                    ) -> GraphModule:
     """
     Concrete tracing API
@@ -1685,25 +1592,16 @@ def concrete_trace(root : Union[torch.nn.Module, Callable[..., Any]],
             The struct of dict is: leaf_class: ([(module_path, module_name)], is_iterator_class).
                 is_iterator_class: Is the class init from an iterator. Only 'tuple', 'list', 'set' or 'dict' needs to set it to True.
 
-        dce (bool): If set to True, dead code eliminatation will be applied on the graph.
-
-        dce_ignored_function (Set[Callable]): The node that its target in this set will not be removed from the graph during dce.
-
         cpu_offload (bool): Whether to offload the module to CPU during tracing. If set to True, the traced code will be executed on GPU,
             but is offloaded to CPU afterward. This is useful for reducing memory usage during tracing, but may cause performance issues.
             If set to False, there will be no offloading during tracing, but the traced code will be executed on default device.
 
-        trace_twice (bool): If set to True, a second trace will be performed, and the two obtained graphs will be checked for consistency.
-
-        record_frames (bool): If set to True, will add frame information to node.meta['frame_record']. Note this will cost additional trace time.
-
     Returns:
         fx.GraphModule: a Module created from the recorded operations from ``root``.
     """
-    dce_ignored_function = dce_ignored_function if isinstance(dce_ignored_function, set) else set()
-    assert all(callable(ignore_func) for ignore_func in dce_ignored_function)
-
-    tracer = ConcreteTracer(cpu_offload = cpu_offload, record_frames = record_frames)
+    tracer = ConcreteTracer(cpu_offload = cpu_offload)
+    is_training = root.training
+    root.eval()
 
     graph = tracer.trace(root,
         autowrap_leaf_function = autowrap_leaf_function,
@@ -1737,8 +1635,10 @@ def concrete_trace(root : Union[torch.nn.Module, Callable[..., Any]],
             if node_a.op == 'get_attr' and node_a.name.startswith('_tensor_constant'):
                 assert node_b.op == 'get_attr' and node_b.name.startswith('_tensor_constant')
                 assert torch.equal(getattr(root, node_a.name), getattr(root, node_b.name))
-            elif node_a.op == 'call_function' and is_autograd_apply(target_a):
-                assert node_b.op == 'call_function' and is_autograd_apply(target_b)
+            elif node_a.op == 'call_function' and isinstance(target_a, Callable) and target_a.__name__ == 'apply' and\
+                hasattr(target_a, '__self__') and issubclass(target_a.__self__, torch.autograd.Function):
+                assert node_b.op == 'call_function' and isinstance(target_b, Callable) and target_b.__name__ == 'apply' and\
+                hasattr(target_b, '__self__') and issubclass(target_b.__self__, torch.autograd.Function)
             else:
                 assert node_a.op == node_b.op and target_a == target_b, f'op: {node_a.op} vs {node_b.op}, target: {target_a} vs {target_b}'
 
@@ -1747,17 +1647,7 @@ def concrete_trace(root : Union[torch.nn.Module, Callable[..., Any]],
         traced = GraphModule(tracer.root, graph, name)
 
         if dce:
-            # some side effectful functions that should not be deleted during dead code elimination
-            # there may be more than listed here
-            default_extra_side_effectful_functions = {
-                operator.setitem,
-                builtins.next,
-                _orig_torch_no_grad,
-                _orig_torch_no_grad_enter,
-                _orig_torch_no_grad_exit,
-            }
-            extra_side_effectful_functions = default_extra_side_effectful_functions | dce_ignored_function
-            with _Patcher() as patcher, ExtraSEFPatcher(extra_side_effectful_functions):
+            with _Patcher() as patcher:
                 patcher.patch_method(Node, 'is_impure', node_is_impure_wrapper, deduplicate=False)
                 traced.graph.eliminate_dead_code()
             traced.recompile()  # this need to be done in MagicMethodPatcher context
@@ -1765,5 +1655,8 @@ def concrete_trace(root : Union[torch.nn.Module, Callable[..., Any]],
     # TODO: better infomation
     if check_args is not None:
         assert root(**check_args) == traced(**check_args)
+
+    if is_training:
+        root.train()
 
     return traced

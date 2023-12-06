@@ -30,7 +30,7 @@ def transform_task_str(origin: str) -> str:
     return origin.replace("-", " ").title()
 
 def get_task_description(task: str) -> str:
-    task_description_path = "/data/data0/v-junliang/DNNGen/task_descriptions"
+    task_description_path = "/mnt/msrasrg/yileiyang/DNNGen/task_descriptions"
     with open(os.path.join(task_description_path, task)) as f:
         return f.readline()
 
@@ -42,7 +42,7 @@ def dataset_to_task_description(dataset: str) -> str:
     Returns:
         task_description: The description of tasks that the dataset is used for.
     """
-    dataset_to_tasks_path = "/data/data0/v-junliang/DNNGen/dataset-tasks/images"
+    dataset_to_tasks_path = "/mnt/msrasrg/yileiyang/DNNGen/dataset-tasks/images"
     with open(os.path.join(dataset_to_tasks_path, dataset)) as f:
         tasks = eval(f.readline())
     description = ""

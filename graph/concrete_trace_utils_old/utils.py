@@ -2,13 +2,12 @@
 # Licensed under the MIT license.
 
 import builtins
-from dataclasses import dataclass
 import operator
-from typing import Any, Callable, Dict, NamedTuple, Optional, Set, Tuple, Type
+from typing import Any, Callable, Type
 import functools
 
 import torch
-from torch.fx.node import Node, map_aggregate, _side_effectful_functions
+from torch.fx import Node
 
 # These need to run in global scope to handle nested calls correctly
 _orig_module_call: Callable = torch.nn.Module.__call__
@@ -17,9 +16,6 @@ _orig_module_getattribute: Callable = torch.nn.Module.__getattribute__
 
 _orig_agfunc_apply: Callable = torch.autograd.function.Function.apply
 _orig_torch_assert: Callable = torch._assert
-_orig_torch_no_grad: Callable = torch.no_grad
-_orig_torch_no_grad_enter: Callable = torch.no_grad.__enter__
-_orig_torch_no_grad_exit: Callable = torch.no_grad.__exit__
 
 _orig_type: Callable = builtins.type
 _orig_isinstance: Callable = builtins.isinstance
@@ -112,108 +108,3 @@ def map_recursive_zip(fn: Callable, arg0, *args) -> Any:
     else:
         # assert not _orig_isinstance(arg0, slice)
         return fn(arg0, *args)
-
-
-@dataclass
-class FrameRecord:
-    filename: str
-    lineno: str
-    line: str
-    name: str
-
-    def __repr__(self) -> str:
-        if self.filename:
-            return f'File "{self.filename}", line {self.lineno}, in {self.name},  {self.line}'
-        else:
-            return ''
-
-
-class ExtraSEFPatcher:
-    def __init__(self, extra_side_effectful_functions: Set[Callable]):
-        self.extra_side_effectful_functions = extra_side_effectful_functions
-        self.incontext_funcs = set()
-
-    def __enter__(self):
-        self.incontext_funcs = self.extra_side_effectful_functions - _side_effectful_functions
-        _side_effectful_functions.update(self.incontext_funcs)
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        _side_effectful_functions.difference_update(self.incontext_funcs)
-
-
-class TensorMetadata(NamedTuple):
-    # TensorMetadata is a structure containing pertinent information
-    # about a tensor within a PyTorch program.
-
-    # General Tensor metadata
-    shape : torch.Size
-    dtype : torch.dtype
-    requires_grad : bool
-    stride : Tuple[int]
-    memory_format : Optional[torch.memory_format]
-
-    # Quantization metadata
-    is_quantized : bool
-    qparams: Dict[str, Any]
-
-
-def _extract_tensor_metadata(result: torch.Tensor) -> TensorMetadata:
-    """
-    Extract a TensorMetadata NamedTuple describing `result`.
-    """
-    shape = result.shape
-    dtype = result.dtype
-    requires_grad = result.requires_grad
-    stride = result.stride()
-
-    memory_formats = {
-        torch.contiguous_format,
-        torch.channels_last,
-        torch.channels_last_3d,
-    }
-
-    memory_format = None
-
-    for query_format in memory_formats:
-        if result.is_contiguous(memory_format=query_format):
-            memory_format = query_format
-            break
-
-    is_quantized = result.is_quantized
-    qparams: Dict[str, Any] = {}
-    if is_quantized:
-        qscheme = result.qscheme()
-        qparams["qscheme"] = qscheme
-        if qscheme in {torch.per_tensor_affine, torch.per_tensor_symmetric}:
-            qparams["scale"] = result.q_scale()  # type: ignore[assignment]
-            qparams["zero_point"] = result.q_zero_point()  # type: ignore[assignment]
-        elif qscheme in {torch.per_channel_affine, torch.per_channel_affine_float_qparams, torch.per_channel_symmetric}:
-            # In this branch, scale and zero_point are expected to be tensors,
-            # we store the values as immutable_list in TensorMetadata for
-            # easier serialization downstream
-            qparams["scale"] = result.q_per_channel_scales().tolist()  # type: ignore[assignment]
-            qparams["zero_point"] = result.q_per_channel_zero_points().tolist()  # type: ignore[assignment]
-            qparams["axis"] = result.q_per_channel_axis()  # type: ignore[assignment]
-
-    return TensorMetadata(
-        shape, dtype, requires_grad, stride, memory_format, is_quantized, qparams)
-
-
-def extract_tensor_metadata(obj: Any):
-    if isinstance(obj, torch.Tensor):
-        return _extract_tensor_metadata(obj)
-    else:
-        return obj
-
-
-def extract_results_metadata(results: Any, node: Node):
-    if results is not EmptyResult:
-        meta = map_aggregate(results, extract_tensor_metadata)
-        node.meta['tensor_meta'] = meta
-        node.meta['type'] = type(results)
-
-
-class EmptyResult:
-    """Used for identification no results.
-    """
-    pass

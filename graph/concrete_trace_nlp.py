@@ -9,9 +9,15 @@ import torch
 from torch.utils._pytree import tree_map
 from transformers import AutoConfig, AutoModel, AutoTokenizer
 
-from fxgraph_to_seq import Sequence
-from concrete_trace_utils import concrete_trace
-from concrete_trace_utils.passes.kwargs_shape_prop import KwargsShapeProp
+from cube.graph.parser.converter import to_fx_graph
+# pip install sentencepiece
+import psutil
+
+def print_memory_usage(prefix : str = ""):
+    process = psutil.Process()
+    mem_info = process.memory_info()
+    print("When " + prefix + f": Current memory usage: {mem_info.rss / (1024 ** 3):.2f} GB")
+
 
 def create_concrete_args(model_name):
     text = "Huggingface is a really excellent project!"
@@ -27,88 +33,140 @@ def build_model(model_name):
     return model
 
 def concrete_trace_wrap(model, concrete_args):
-    use_cpu = False
     if torch.cuda.is_available():
-        print("trying using gpu to trace...")
         try:
-            model.cuda()
-            to_cuda = lambda x: x.cuda() if isinstance(x, torch.Tensor) else x
-            concrete_args = tree_map(to_cuda, concrete_args)
-            traced_gm = concrete_trace(model, concrete_args)
+            traced_gm = to_fx_graph(model, concrete_args)
         except:
-            use_cpu = True
-            print("failed to trace with gpu, trying cpu...")
-        else:
-            print("successfully traced with gpu")
-            return traced_gm
+            raise Exception("Failed to trace with gpu")
+        print("Successfully traced with gpu")
+        return traced_gm
     else:
-        print("failed to trace with gpu, trying cpu...")
-        use_cpu = True
-    if use_cpu:
-        try:
-            model = model.cpu()
-            to_cpu = lambda x: x.cpu() if isinstance(x, torch.Tensor) else x
-            concrete_args = tree_map(to_cpu, concrete_args)
-            traced_gm = concrete_trace(model, concrete_args)
-        except:
-            print("failed to trace with cpu")
-            return None
-        else:
-            print("successfully traced with cpu")
-            return traced_gm
+        raise RuntimeError("CUDA is not available")
 
 def test_forward(traced_gm, concrete_args):
-    device = next(traced_gm.parameters()).device
-    concrete_args = tree_map(
-        lambda x: x.to(device) if isinstance(x, torch.Tensor) else x,
-        concrete_args
-    )
+
     try:
+        traced_gm.eval()
         traced_gm(**concrete_args)
     except:
-        raise
-        return False
-    else:
-        return True
+        raise Exception("Failed to run forward with gpu")
+    return True
+
+def check_align(before_trace, after_trace):
+    for key in after_trace.keys():
+        if isinstance(after_trace[key], torch.Tensor):
+            if not torch.all(before_trace[key] == after_trace[key]):
+                return False
+    return True
 
 if __name__ == "__main__":
-    model_name_set_path = "model_name_set_nlp_test"
+    current_file_path = os.path.abspath(__file__)
+    current_folder = os.path.dirname(current_file_path)
+    model_name_set_path = os.path.join(current_folder, "huggingface_model_names/model_name_set_nlp")
     with open(model_name_set_path, 'r') as f:
-        model_name_set = eval(f.read())
+        all_model = eval(f.read())
 
-    error_save_dir = "error"
-    xml_save_dir = "save"
-    failed_models = set(os.listdir(error_save_dir))
-    failed_models = set([model_name.replace("--", "/") for model_name in failed_models])
-    collected_models = set(os.listdir(xml_save_dir))
-    collected_models = set([model_name.replace("--", "/") for model_name in collected_models])
-    model_name_set = model_name_set - collected_models
-    model_name_set = model_name_set - failed_models
-    print(f"#model: {len(model_name_set)}")
+    nlp_dir = os.path.join(current_folder, "nlp")
+    if not os.path.exists(nlp_dir):
+        os.makedirs(nlp_dir)
 
-    total = 0
-    traced_count = 0
+    print(f"# model: {len(all_model)}")
+    success_models = set()
+    if os.path.exists(os.path.join(nlp_dir, "success")):
+        with open(os.path.join(nlp_dir, "success"), 'r') as file:
+            names = [line.strip() for line in file]
+            success_models = set(names)
+    model_name_set = all_model - success_models
+    print(f"# already_collected: {len(success_models)}")
+
+    fail_models = set()
+    if os.path.exists(os.path.join(nlp_dir, "fail")):
+        with open(os.path.join(nlp_dir, "fail"), 'r') as file:
+            names = [line.strip() for line in file]
+            fail_models = set(names)
+    model_name_set = model_name_set - success_models
+    print(f"# already_failed: {len(fail_models)}")
+    print(f"# need_to_try: {len(model_name_set)}")
+
+    tried = 0
+    model_loaded = []
+    success_traced = []
+    forward_aligned = []
+    model_failed = []
+    print_memory_usage("start")
+    mem_info = psutil.virtual_memory()
+    total_memory = mem_info.total
+    print(f"Total memory: {total_memory / (1024 ** 3):.2f} GB")
     for model_name in model_name_set:
-        total += 1
-        if total % 100 == 0:
-            print(f"all: {len(model_name_set)}, tried: {total}, traced: {traced_count}")
-
-        print("trying to trace", model_name)
+        print(f"trying to trace {model_name}")
+        tried += 1
         try:
-            concrete_args = create_concrete_args(model_name)
-            model = build_model(model_name)
+            # concrete_args = create_concrete_args(model_name)
+            text = "Huggingface is a really excellent project!"
+            tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+            concrete_args = tokenizer(text, return_tensors="pt")
+            if isinstance(concrete_args, MutableMapping):
+                concrete_args = dict(concrete_args)
+            print_memory_usage("after create_concrete_args of " + model_name)
+            # model = build_model(model_name)
+            config = AutoConfig.from_pretrained(model_name, trust_remote_code=True)
+            model = AutoModel.from_config(config, trust_remote_code=True)
+            print_memory_usage("after build_model of " + model_name)
+            model.eval()
+            model_loaded.append(f"{model_name}, {config.architectures}")
+            before_trace = model(**concrete_args)
+            print_memory_usage("after model forward of " + model_name)
+            
             traced_gm = concrete_trace_wrap(model, concrete_args)
-            assert test_forward(traced_gm, concrete_args), "traced forward failed"
-            KwargsShapeProp(traced_gm).propagate(concrete_args)
-            seq = Sequence(traced_gm, model)
-            with open(os.path.join(xml_save_dir, model_name.replace('/', "--")), 'w') as f:
-                f.write(str(seq))
-            traced_count += 1
+            print_memory_usage("after concrete_trace of " + model_name)
+            success_traced.append(f"{model_name}, {config.architectures}")
+            traced_gm.eval()
+            after_trace = traced_gm(**concrete_args)
+            print_memory_usage("after traced_gm forward of " + model_name)
+
+            assert check_align(before_trace, after_trace), "Traced model does not match the original model"
+            print_memory_usage("after check_align of " + model_name)
+            forward_aligned.append(f"{model_name}, {config.architectures}")
+            with open(os.path.join(nlp_dir, "success"), 'a') as file:
+                file.write(f"{model_name}\n")
             print(f"{model_name} traced successfully")
-        except:
+        except Exception as e:
+            model_failed.append(f"{model_name}, {config.architectures if 'config' in locals() and config else None}")
+            error_message = traceback.format_exc()
+            with open(os.path.join(nlp_dir, "errors"), "a") as file:
+                file.writelines(f"\n{model_name} failed\n")
+                if 'config' in locals() and config:
+                    file.writelines(f"Architectures: {config.architectures}\n")
+                file.writelines(error_message)
+            with open(os.path.join(nlp_dir, "fail"), 'a') as file:
+                file.write(f"{model_name}\n")
             print(f"{model_name} failed")
-            with open(os.path.join(error_save_dir, model_name.replace('/', "--")), 'w') as f:
-                f.write(traceback.format_exc())
+            print(error_message)
             continue
+        finally:
+            torch.cuda.empty_cache()
+            print(f"all: {len(model_name_set)}, tried: {tried}, model_failed: {len(model_failed)} model_loaded: {len(model_loaded)}, success_traced: {len(success_traced)}, forward_aligned: {len(forward_aligned)}")
+    with open(os.path.join(nlp_dir, "nlp_log"), 'w') as f:
+        import json
+        result_dict = {
+            'forward_aligned': tuple(forward_aligned),
+            'forward_aligned_num': len(forward_aligned),
+            'success_traced': tuple(success_traced),
+            'success_traced_num': len(success_traced),
+            'model_loaded': tuple(model_loaded),
+            'model_loaded_num': len(model_loaded),
+            'model_failed': tuple(model_failed),
+            'model_failed_num': len(model_failed),
+            'tried': tried,
+            'model_name_set': tuple(model_name_set),
+            'model_name_set_num': len(model_name_set),
+            'already_success': tuple(success_models),
+            'already_success_num': len(success_models),
+            'already_failed': tuple(fail_models),
+            'already_failed_num': len(fail_models),
+            'all_model': tuple(all_model),
+            'all_model_num': len(all_model),
+        }
+        json.dump(result_dict, f, indent=4)
 
     print("concrete trace nlp done!")

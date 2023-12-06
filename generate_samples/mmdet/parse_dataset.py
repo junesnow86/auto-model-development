@@ -14,7 +14,7 @@ def parse_config(config_path):
 
 datasets = set()
 
-mmdet_config_root = "/home/v-junliang/DNNGen/concrete_trace_test/mmdetection/configs"
+mmdet_config_root = "/home/yileiyang/workspace/DNNGen/concrete_trace_test/mmdetection/configs"
 for dir in os.listdir(mmdet_config_root):
     if dir == "_base_":
         continue

@@ -5,11 +5,11 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .concrete_tracer import ConcreteTracer
 
-import sys
 import ast
 import builtins
 import inspect
 import logging
+import platform
 
 from textwrap import dedent
 from types import MethodType, FunctionType
@@ -27,7 +27,6 @@ from .utils import (
 )
 
 _logger = logging.getLogger(__name__)
-
 
 class TransformerOp(ast.NodeTransformer):
     """
@@ -227,12 +226,10 @@ class OperatorPatcher:
             ]
             body0.name = 'new_func'
             # for deleting some annotations like 'add_start_docstrings_to_model_forward' or 'add_code_sample_docstrings'
-            # these decorators are used for tranformers model docstrings generation, can be removed in trace
-            transform_useless_decorators = ('add_start_docstrings_to_model_forward', 'add_code_sample_docstrings', 'replace_return_docstrings')
             body0.decorator_list = [i for i in body0.decorator_list
                 if isinstance(i, ast.Call) and isinstance(i.func, ast.Name) and i.func.id == 'patch_run' and
                     isinstance(i.args[0], ast.Name) and
-                    i.args[0].id not in transform_useless_decorators]
+                    i.args[0].id not in ('add_start_docstrings_to_model_forward', 'add_code_sample_docstrings')]
             ast.fix_missing_locations(new_tree)
 
             # closure info
@@ -245,7 +242,7 @@ class OperatorPatcher:
 
             tuple_wrapped = tuple
             try:
-                if sys.version_info < (3, 9):
+                if platform.python_version_tuple() < ('3', '9'):
                     setattr(builtins, 'tuple', _orig_tuple)
                 var_dict = {}
                 exec(
@@ -262,9 +259,8 @@ class OperatorPatcher:
                 else:
                     return var_dict['new_func']
             finally:
-                if sys.version_info < (3, 9):
+                if platform.python_version_tuple() < ('3', '9'):
                     setattr(builtins, 'tuple', tuple_wrapped)
-
 
 class OperatorPatcherContext:
     ctx_tracer: Optional['ConcreteTracer'] = None

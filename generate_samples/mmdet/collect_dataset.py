@@ -6,7 +6,7 @@ warnings.filterwarnings("ignore")
 from mmcv import Config
 from mmdet.utils import replace_cfg_vals, update_data_root
 
-sys.path.append("/home/v-junliang/DNNGen/concrete_trace_test/prepare_data")
+sys.path.append("/home/yileiyang/workspace/DNNGen/concrete_trace_test/prepare_data")
 from utils import Sample
 
 
@@ -33,7 +33,7 @@ datasets = (
 
 samples = []
 
-mmdet_configs_root = "/home/v-junliang/DNNGen/concrete_trace_test/mmdetection/configs"
+mmdet_configs_root = "/home/yileiyang/workspace/DNNGen/concrete_trace_test/mmdetection/configs"
 count = 0
 for dir in os.listdir(mmdet_configs_root):
     if dir == "_base_":

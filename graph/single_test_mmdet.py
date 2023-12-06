@@ -15,8 +15,8 @@ from mmdet.datasets import replace_ImageToTensor
 from mmdet.datasets.pipelines import Compose
 from torch.nn.functional import normalize
 
-sys.path.append("/home/v-junliang/DNNGen/concrete_trace_test/nni")
-sys.path.append("/home/v-junliang/DNNGen/concrete_trace_test/")
+sys.path.append("/home/yileiyang/workspace/DNNGen/concrete_trace_test/nni")
+sys.path.append("/home/yileiyang/workspace/DNNGen/concrete_trace_test/")
 from dnngen_utils.fxgraph_to_seq import Sequence, fold_seq
 from nni.common.concrete_trace_utils import concrete_trace
 from nni.common.concrete_trace_utils.passes import KwargsShapeProp
@@ -50,7 +50,7 @@ def check_equal(a, b):
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 def build(config_name):
-    mmdet_dir = '/home/v-junliang/DNNGen/concrete_trace_test/mmdetection'
+    mmdet_dir = '/home/yileiyang/workspace/DNNGen/concrete_trace_test/mmdetection'
     img = f'{mmdet_dir}/tests/data/color.jpg'
     config_dir = os.path.join(mmdet_dir, "configs")
     config_path = os.path.join(config_dir, config_name+".py")

@@ -1,7 +1,7 @@
 import os
 
 task_set = set()
-dataset_tasks_dir_path = "/data/data0/v-junliang/DNNGen/auto_model_dev/ds2task"
+dataset_tasks_dir_path = "/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/ds2task"
 print("total dataset: ", len(os.listdir(dataset_tasks_dir_path)))
 for file in os.listdir(dataset_tasks_dir_path):
     filepath = os.path.join(dataset_tasks_dir_path, file)

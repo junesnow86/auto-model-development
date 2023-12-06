@@ -10,9 +10,9 @@ from transformers import (
     AutoProcessor,
 )
 
-sys.path.append("/home/v-junliang/DNNGen/nni")
-sys.path.append("/home/v-junliang/DNNGen/'auto_model_dev/concrete_trace/huggingface/concrete_trace_subtype")
-sys.path.append("/home/v-junliang/DNNGen/auto_model_dev")
+sys.path.append("/home/yileiyang/workspace/DNNGen/nni")
+sys.path.append("/home/yileiyang/workspace/DNNGen/'auto_model_dev/concrete_trace/huggingface/concrete_trace_subtype")
+sys.path.append("/home/yileiyang/workspace/DNNGen/auto_model_dev")
 from fxgraph_to_seq import Sequence, fold_seq
 
 from nni.common.concrete_trace_utils import concrete_trace
@@ -79,7 +79,7 @@ if __name__ == "__main__":
         model_name_set = eval(f.read())
     print(f"#model: {len(model_name_set)}")
 
-    failed_model_names_file_path = "/data/data0/v-junliang/DNNGen/auto_model_dev/concrete_trace_info/huggingface/audio/failed_model_names"
+    failed_model_names_file_path = "/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/concrete_trace_info/huggingface/audio/failed_model_names"
     try:
         with open(failed_model_names_file_path, 'r') as f:
             failed_model_names = eval(f.read())
@@ -91,7 +91,7 @@ if __name__ == "__main__":
     raw_input = ds[0]["audio"]["array"]
     print("dataset loaded")
 
-    xml_save_dir = "/data/data0/v-junliang/DNNGen/auto_model_dev/xml/huggingface/audio"
+    xml_save_dir = "/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/xml/huggingface/audio"
     total = 0
     traced_count = 0
     for model_name in model_name_set:

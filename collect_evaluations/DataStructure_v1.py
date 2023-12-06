@@ -451,8 +451,8 @@ def print_tables(dataset_tables):
 
 if __name__ == "__main__":
 
-    # task_dir = "/home/v-junliang/DNNGen/concrete_trace_test/collect_evaluations/evaluation_results/nlp/sentence-similarity"
+    # task_dir = "/home/yileiyang/workspace/DNNGen/concrete_trace_test/collect_evaluations/evaluation_results/nlp/sentence-similarity"
     # parse_task(task_dir, default_datasets, default_metrics, default_dataset_metric)
 
-    csv_path = "/home/v-junliang/DNNGen/concrete_trace_test/collect_evaluations/evaluation_results/nlp/sentence-similarity/lighteternal/stsb-xlm-r-greek-transfer"
+    csv_path = "/home/yileiyang/workspace/DNNGen/concrete_trace_test/collect_evaluations/evaluation_results/nlp/sentence-similarity/lighteternal/stsb-xlm-r-greek-transfer"
     parse_csv(csv_path, default_datasets, default_metrics, default_dataset_metric)

@@ -2,12 +2,12 @@ import torch
 from transformers import AutoFeatureExtractor, AutoConfig, AutoModel
 import pickle
 import sys
-sys.path.append("/home/v-junliang/DNNGen/concrete_trace_test/nni/")
-sys.path.append("/home/v-junliang/DNNGen/concrete_trace_test/concrete_trace/huggingface/concrete_trace_subtype")
-sys.path.append("/home/v-junliang/DNNGen/concrete_trace_test/concrete_trace/graph2seq")
+sys.path.append("/home/yileiyang/workspace/DNNGen/concrete_trace_test/nni/")
+sys.path.append("/home/yileiyang/workspace/DNNGen/concrete_trace_test/concrete_trace/huggingface/concrete_trace_subtype")
+sys.path.append("/home/yileiyang/workspace/DNNGen/concrete_trace_test/concrete_trace/graph2seq")
 from nni.common.concrete_trace_utils import concrete_trace
 
-with open('/home/v-junliang/DNNGen/concrete_trace_test/concrete_trace/huggingface/concrete_trace_subtype/cv/img.pkl', 'rb') as f:
+with open('/home/yileiyang/workspace/DNNGen/concrete_trace_test/concrete_trace/huggingface/concrete_trace_subtype/cv/img.pkl', 'rb') as f:
     raw_input = pickle.load(f)
 
 model_name = 'hustvl/yolos-tiny'

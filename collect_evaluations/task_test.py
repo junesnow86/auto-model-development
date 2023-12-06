@@ -70,7 +70,7 @@ if __name__ == "__main__":
     # task = "nlp/sentence-similarity"
     # task = "cv/image-classification"
     count_dict = {}
-    task_root = "/home/v-junliang/DNNGen/concrete_trace_test/collect_evaluations/evaluation_results"
+    task_root = "/home/yileiyang/workspace/DNNGen/concrete_trace_test/collect_evaluations/evaluation_results"
     for subType in os.listdir(task_root):
         subType_dir = os.path.join(task_root, subType)
         print(f"parsing subType: {subType}")

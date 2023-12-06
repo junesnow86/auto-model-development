@@ -53,25 +53,30 @@ def formal_to_index(formal_set, formal2index):
     return set([formal2index[formal] for formal in formal_set])
 
 if __name__ == "__main__":
-    with open("model_name_set_all") as f:
+    model_name_set_path = "/home/yileiyang/workspace/auto-model-compiler/mapping/model_name_set_all"
+    with open(model_name_set_path) as f:
         model_name_set = eval(f.read())
     print("#all model:", len(model_name_set))
 
-    # ds_set = set(os.listdir("/data/data0/v-junliang/DNNGen/auto_model_dev/dataset_desc"))
+    # ds_set = set(os.listdir("/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/dataset_desc"))
     ds_set = set()
     formal2index = {}
-    for file in os.listdir("/data/data0/v-junliang/DNNGen/auto_model_dev/dataset_desc"):
-        with open(os.path.join("/data/data0/v-junliang/DNNGen/auto_model_dev/dataset_desc", file)) as f:
+    for file in os.listdir("/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/dataset_desc"):
+        with open(os.path.join("/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/dataset_desc", file)) as f:
             formal_name = eval(f.read())["name"]
             ds_set.add(formal_name)
             formal2index[formal_name] = file
     print("#dataset:", len(ds_set))
 
-    save_root = "/data/data0/v-junliang/DNNGen/auto_model_dev/mapping/huggingface/model_to_datasets"
+    save_root = "/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/mapping/huggingface/model_to_datasets"
+    if not os.path.exists(save_root):
+        os.makedirs(save_root)
+    current_file_path = os.path.abspath(__file__)
+    current_folder = os.path.dirname(current_file_path)
     collected = 0
     total = 0
-    if os.path.exists("tried_models"):
-        with open("tried_models") as f:
+    if os.path.exists(os.path.join(current_folder, "tried_models")):
+        with open(os.path.join(current_folder, "tried_models")) as f:
             tried_models = set(eval(f.read()))
         model_name_set = model_name_set - tried_models
     else:

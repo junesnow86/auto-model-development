@@ -3,7 +3,7 @@ import json
 import requests
 from lxml import etree
 
-
+# gen dataset_desc folder, which contains dataset details like: {"name": standard_name, "content": content}
 def dataset_num_of_mod(mod):
     """
     Returns:
@@ -76,7 +76,7 @@ def dataset_desc(dataset_url):
 def dataset_desc_of_mod(mod):
     """parse the given modality page to get and save dataset descriptions
     """
-    save_root = "/data/data0/v-junliang/DNNGen/auto_model_dev/dataset_desc"
+    save_root = "/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/dataset_desc"
     mod_dir = os.path.join(save_root, mod)
     if not os.path.exists(mod_dir):
         os.mkdir(mod_dir)
@@ -116,9 +116,13 @@ def dataset_desc_of_mod(mod):
 
 def dataset_desc_all():
     root_url = "https://paperswithcode.com/datasets"
-    save_root = "/data/data0/v-junliang/DNNGen/auto_model_dev/dataset_desc"
+    save_root = "/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/dataset_desc"
+    if not os.path.exists(save_root):
+        os.makedirs(save_root)
+
     n_ds = dataset_num_all(root_url)
     print(f"have {n_ds} datasets to collect")
+
 
     if n_ds % 48 > 0:
         n_page = n_ds // 48 + 1

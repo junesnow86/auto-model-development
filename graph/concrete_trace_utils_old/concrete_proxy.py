@@ -79,11 +79,6 @@ class ConcreteProxy(Proxy):
         return ConcreteAttrProxy(self, k)
 
     def __call__(self, *args, **kwargs) -> ConcreteProxy:
-        # If it is a module proxy, we should not create a `call_method` node for this case.
-        # What we need is to trace this module or the internals of this module,
-        # so here we directly call the `__call__` to trigger `create_proxy` inner the `__call__`.
-        if isinstance(self.value, torch.nn.Module):
-            return self.value.__call__(*args, **kwargs)
         return self.tracer.create_proxy('call_method', '__call__', (self,) + args, kwargs)
 
     def __iter__(self) -> Union[Iterable, ConcreteProxy]:
@@ -193,22 +188,6 @@ class ConcreteProxy(Proxy):
         # should only be in dict getitem
         return hash(self.value)
 
-    def __contains__(self, item) -> bool:
-        # should only be in iterable
-        return self.value.__contains__(item)
-
-    def __enter__(self):
-        if getattr(self.value.__class__.__enter__, "__fx_already_patched", False):
-            return self.value.__enter__()
-        else:
-            return self.value.__class__.__enter__(self)
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        if getattr(self.value.__class__.__exit__, "__fx_already_patched", False):
-            return self.value.__exit__(exc_type, exc_value, traceback)
-        else:
-            return self.value.__class__.__exit__(self, exc_type, exc_value, traceback)
-
     @compatibility(is_backward_compatible=True)
     def keys(self):
         # to detect if in executing `**proxy`
@@ -279,15 +258,7 @@ class ConcreteAttrProxy(ConcreteProxy):
         self.attr = attr
         self.tracer = root.tracer
         self._node: Optional[Node] = None
-        if _orig_isinstance(root.value, torch.Tensor) and attr == 'is_cuda' and self.tracer.cpu_offload:
-            self.value = True
-        elif _orig_isinstance(root.value, torch.Tensor) and attr == 'device' and self.tracer.cpu_offload:
-            self.value = torch.device('cuda')
-            warning_msg = "operation <tensor>.device is detected, it will always return torch.device('cuda') during trace, " + \
-                          "please make sure don't manually change the tensor device in the code."
-            _logger.warning(warning_msg)
-        else:
-            self.value = _orig_getattr(root.value, attr)
+        self.value = _orig_getattr(root.value, attr)
 
     def __repr__(self) -> str:
         calling_frame_name = inspect.stack()[1][1]

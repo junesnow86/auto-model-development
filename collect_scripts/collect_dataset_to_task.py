@@ -2,6 +2,8 @@ import os
 import requests
 from lxml import etree
 
+# gen ds2task folder, the file name is a dataset, the content is the task list of this dataset
+
 def get_dataset_tasks(url: str) -> tuple[str]:
     html_string = requests.get(url).text
     parsed_html = etree.HTML(html_string)
@@ -56,7 +58,7 @@ def dataset_num_all(root_url) -> int:
     return n_dataset
 
 def parse_mod(root, mod):
-    save_root = '/data/data0/v-junliang/DNNGen/collect_task_descriptions/dataset-tasks'
+    save_root = '/mnt/msrasrg/yileiyang/DNNGen/collect_task_descriptions/dataset-tasks'
     mod_dir = os.path.join(save_root, mod)
     if not os.path.exists(mod_dir):
         os.mkdir(mod_dir)
@@ -89,7 +91,9 @@ def parse_mod(root, mod):
         print(f'{count} datasets\' tasks collected')
 
 def parse_all():
-    save_root = '/data/data0/v-junliang/DNNGen/auto_model_dev/ds2task'
+    save_root = '/mnt/msrasrg/yileiyang/DNNGen/auto_model_dev/ds2task'
+    if not os.path.exists(save_root):
+        os.makedirs(save_root)
     root_url = 'https://paperswithcode.com/datasets'
     root = 'https://paperswithcode.com'
     n_dataset = dataset_num_all(root_url)

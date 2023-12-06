@@ -15,7 +15,7 @@ from mmdet.apis import init_detector
 from mmdet.datasets import replace_ImageToTensor
 from mmdet.datasets.pipelines import Compose
 
-sys.path.append("/home/v-junliang/DNNGen/concrete_trace_test/nni")
+sys.path.append("/home/yileiyang/workspace/DNNGen/concrete_trace_test/nni")
 from nni.common.concrete_trace_utils import concrete_trace
 from nni.common.concrete_trace_utils.passes import KwargsShapeProp
 from nni.common.concrete_trace_utils.passes.counter import counter_pass
@@ -236,7 +236,7 @@ if device.type == 'cuda':
     config_files_correct = (*config_files_correct, *config_files_need_gpu)
 
 def build_model(config_name):
-    mmdet_dir = "/home/v-junliang/DNNGen/concrete_trace_test/mmdetection"
+    mmdet_dir = "/home/yileiyang/workspace/DNNGen/concrete_trace_test/mmdetection"
     config_dir = os.path.join(mmdet_dir, "configs")
     config_path = os.path.join(config_dir, config_name+".py")
     config = mmcv.Config.fromfile(config_path)
@@ -257,7 +257,7 @@ def build_model(config_name):
     return model
 
 def build_input(model):
-    img = f"/home/v-junliang/DNNGen/concrete_trace_test/mmdetection/tests/data/color.jpg"
+    img = f"/home/yileiyang/workspace/DNNGen/concrete_trace_test/mmdetection/tests/data/color.jpg"
     config = model.cfg
     with torch.no_grad():
         config.data.test.pipeline = replace_ImageToTensor(config.data.test.pipeline)
@@ -350,7 +350,7 @@ def trace_and_check(config_name):
     return traced_gm, img_tensor
 
 if __name__ == '__main__':
-    configs_dir = "/home/v-junliang/DNNGen/concrete_trace_test/mmdetection/configs"
+    configs_dir = "/home/yileiyang/workspace/DNNGen/concrete_trace_test/mmdetection/configs"
     
     with open("traced_list", "r") as f:
         traced_list = eval(f.readline())

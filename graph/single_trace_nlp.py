@@ -30,6 +30,10 @@ if __name__ == "__main__":
     model_name = "gpt2"
     dummy_input = create_dummy_input(model_name)
     model = build_model(model_name)
+
+    current_file_path = os.path.abspath(__file__)
+    current_folder = os.path.dirname(current_file_path)
+
     if dummy_input is not None and model is not None:
         traced_gm = concrete_trace(
             model,
@@ -41,6 +45,6 @@ if __name__ == "__main__":
         )
         KwargsShapeProp(traced_gm).propagate(dummy_input)
         seq = Sequence(traced_gm, model)
-        with open("sequence", "w") as f:
+        with open(os.path.join(current_folder, "sequence"), "w") as f:
             print(seq, file=f)
     print("task done")
