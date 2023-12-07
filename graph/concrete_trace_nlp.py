@@ -27,9 +27,9 @@ def setup_logger(log_file):
     handler.setFormatter(formatter)
     logger.addHandler(handler)
 
-    stream_handler = logging.StreamHandler()
-    stream_handler.setFormatter(formatter)
-    logger.addHandler(stream_handler)
+    # stream_handler = logging.StreamHandler()
+    # stream_handler.setFormatter(formatter)
+    # logger.addHandler(stream_handler)
 
     return logger
 
