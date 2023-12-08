@@ -157,7 +157,7 @@ def trace_single_model(model_name: str, nlp_dir: str, process_num_list: ListProx
 if __name__ == "__main__":
     current_file_path = os.path.abspath(__file__)
     current_folder = os.path.dirname(current_file_path)
-    model_name_set_path = os.path.join(current_folder, "huggingface_model_names/model_name_set_nlp_2")
+    model_name_set_path = os.path.join(current_folder, "huggingface_model_names/model_name_set_nlp")
     with open(model_name_set_path, 'r') as f:
         all_model = eval(f.read())
     print(f"# model: {len(all_model)}")
