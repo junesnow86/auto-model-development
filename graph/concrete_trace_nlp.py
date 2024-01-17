@@ -12,53 +12,67 @@ from cube.graph.parser.converter import to_fx_graph
 
 import psutil
 import multiprocessing
+from multiprocessing.pool import ThreadPool
 from concurrent_log_handler import ConcurrentRotatingFileHandler 
 import logging 
 import time
-import timeout_decorator 
+import timeout_decorator
 
 # pip install sentencepiece transformers fuzzywuzzy concurrent-log-handler psutil
 
-@timeout_decorator.timeout(20, timeout_exception=TimeoutError)
-def load_model_with_timeout(config, trust_remote_code):  
-    return AutoModel.from_config(config, trust_remote_code=trust_remote_code) 
-
 text: str = "Huggingface is a really excellent project!"
+cache_dir: str = "/mnt/msrasrg/yileiyang/hf_cache"
 
-# different process has different logger, with timestamp
+@timeout_decorator.timeout(120, timeout_exception=TimeoutError)
+def load_model_with_timeout(config, trust_remote_code):
+    return AutoModel.from_config(config, trust_remote_code=trust_remote_code)
+
 def setup_logger(log_file):
+    # different process has different logger, with timestamp
     logger = logging.getLogger(log_file)
     logger.setLevel(logging.DEBUG)
-
     # logger will only init once for one log_file
     if not logger.handlers: 
         handler = ConcurrentRotatingFileHandler(log_file, "a", 1024*1024, 8)
         formatter = logging.Formatter('%(asctime)s [PID %(process)d][%(levelname)s]: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')  
         handler.setFormatter(formatter)
         logger.addHandler(handler)
-
     return logger
 
-# different process has the same logger, without timestamp
 def setup_logger2(log_file):
+    # different process has the same logger, without timestamp
     logger = logging.getLogger(log_file)
     logger.setLevel(logging.DEBUG)
-
     if not logger.handlers: 
         handler = ConcurrentRotatingFileHandler(log_file, "a", 10*1024*1024, 8)
         logger.addHandler(handler)
-
     return logger
 
-def print_memory_usage(prefix : str = ""):
+def print_memory_usage(logger, prefix : str = ""):
+    import subprocess
     process = psutil.Process()
     mem_info = process.memory_info()
-    print("When " + prefix + f": Current memory usage: {mem_info.rss / (1024 ** 3):.2f} GB")
+    logger.info("When " + prefix + f": Current memory usage: {mem_info.rss / (1024 ** 3):.2f} GB")
+    try:
+        smi_output = subprocess.check_output(
+            ['nvidia-smi', '--query-gpu=memory.used,memory.total', '--format=csv,nounits,noheader'],
+            encoding='utf-8'
+        )
+        memory_info = smi_output.strip().split('\n')
+        for idx, mem in enumerate(memory_info):
+            used, total = mem.split(', ')
+            logger.info(f"GPU {idx}: used {used}MiB / total {total}MiB")
+    except subprocess.CalledProcessError as e:
+        logger.info("Can't execute nvidia-smi command:", e.output)
+    except FileNotFoundError:
+        logger.info("nvidia-smi command not found , make sure nvidia driver has been install successfully.")
+
 
 def concrete_trace_wrap(model, concrete_args):
     if torch.cuda.is_available():
         try:
             traced_gm = to_fx_graph(model, concrete_args)
+            
         except:
             raise Exception("Failed to trace with gpu")
         print("Successfully traced with gpu")
@@ -80,6 +94,8 @@ def is_process_alive(pid):
     except psutil.NoSuchProcess:
         return False
 
+# get an available process number from 0 to multiprocessing.cpu_count() - 1
+# one process can get different process num when called multiple times
 def get_process_num(process_num_list: ListProxy):
     for i in range(len(process_num_list)):
         if process_num_list[i] == multiprocessing.current_process().pid:
@@ -89,7 +105,12 @@ def get_process_num(process_num_list: ListProxy):
             return i
     raise RuntimeError(f"No available process number, current {process_num_list}")
 
-def trace_single_model(model_name: str, nlp_dir: str, process_num_list: ListProxy, model_name_list: ListProxy): 
+def trace_worker(model_name: str, nlp_dir: str, process_num_list: ListProxy, model_name_list: ListProxy):
+    p = multiprocessing.Process(target=trace_single_model, args=(model_name, nlp_dir, process_num_list, model_name_list))   # , daemon=True
+    p.start()
+    p.join()
+
+def trace_single_model(model_name: str, nlp_dir: str, process_num_list: ListProxy, model_name_list: ListProxy):
     try:
         process_num = get_process_num(process_num_list)
         logger = setup_logger(os.path.join(nlp_dir, f'all4debug_{process_num}.log'))
@@ -103,25 +124,25 @@ def trace_single_model(model_name: str, nlp_dir: str, process_num_list: ListProx
         logger_errors = setup_logger2(os.path.join(nlp_dir, 'errors'))
 
         start_time = time.time()
-        # print_memory_usage(f"trying to trace {model_name}")
         logger.info(f"start trying model: {model_name}")
-
-        tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+  
+        tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True, cache_dir=cache_dir)
         logger.info(f"{model_name} Tokenizer loaded")
 
         concrete_args = tokenizer(text, return_tensors="pt")
         logger.info(f"{model_name} tokenized")
         if isinstance(concrete_args, MutableMapping):
             concrete_args = dict(concrete_args)
-        config = AutoConfig.from_pretrained(model_name, trust_remote_code=True)
+        config = AutoConfig.from_pretrained(model_name, trust_remote_code=True, cache_dir=cache_dir)
         logger.info(f"{model_name} config loaded")
         model = load_model_with_timeout(config, trust_remote_code=True)
+        print_memory_usage(logger, f"after load model {model_name}")
         model_loaded = True
-        logger.info(f"{model_name} model loaded")  
+        logger.info(f"{model_name} model loaded")
 
         # model.eval()
         # before_trace = model(**concrete_args)
-        
+        logger.info(f"{model_name} has parameter: {sum(p.numel() for p in model.parameters())}")
         traced_gm = concrete_trace_wrap(model, concrete_args)
         success_traced = True
         logger.info(f"{model_name} model traced")
@@ -141,7 +162,6 @@ def trace_single_model(model_name: str, nlp_dir: str, process_num_list: ListProx
         if 'config' in locals() and config:
             logger_errors.error(f"Architectures: {config.architectures}")
         logger_errors.error(error_message)
-
     finally:
         end_time = time.time()
         logger.info(f"Finish trying model: {model_name}, time: {end_time - start_time:.2f} s")
@@ -153,6 +173,7 @@ def trace_single_model(model_name: str, nlp_dir: str, process_num_list: ListProx
             logger_traced.info(f"{model_name}, {config.architectures}")
         model_name_list.remove(model_name)
         logger.info(f"Left models number: {len(model_name_list)}")
+
 
 if __name__ == "__main__":
     current_file_path = os.path.abspath(__file__)
@@ -179,13 +200,14 @@ if __name__ == "__main__":
     total_memory = mem_info.total
     print(f"Total memory: {total_memory / (1024 ** 3):.2f} GB")
 
-    process_num = multiprocessing.cpu_count() - 1
+    process_num = multiprocessing.cpu_count() - 8
     with multiprocessing.Manager() as manager:
         model_name_list = manager.list(model_name_set)
+        
         process_num_list = manager.list([0] * process_num)
         arguments = [(model_name, nlp_dir, process_num_list, model_name_list) for model_name in model_name_set]
 
-        with multiprocessing.Pool(processes = process_num) as pool:
-            pool.starmap(trace_single_model, arguments)
+        with ThreadPool(processes = process_num) as pool:
+            pool.starmap(trace_worker, arguments)
 
     print("concrete trace nlp done!")
